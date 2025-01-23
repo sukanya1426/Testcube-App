@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider, SignedIn, SignedOut, SignIn, UserButton } from "@clerk/nextjs";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,12 +32,19 @@ export default function RootLayout({
         >
           <header className="flex justify-between px-4 py-2 bg-gray-100 shadow">
             <h1 className="text-xl font-bold">test-cube</h1>
-            <UserButton showName />
+            <div className="flex items-center space-x-4">
+              <SignedIn>
+                <Link href="/dashboard" className="text-blue-500 hover:underline">
+                  Dashboard
+                </Link>
+              </SignedIn>
+              <UserButton showName />
+            </div>
           </header>
           <main className="flex items-center justify-center min-h-screen bg-gray-50">
             <SignedOut>
               <div className="flex items-center justify-center w-full max-w-md p-8 bg-white shadow-md rounded-lg">
-              <SignIn routing="hash"/>
+                <SignIn routing="hash" />
               </div>
             </SignedOut>
             <SignedIn>{children}</SignedIn>
