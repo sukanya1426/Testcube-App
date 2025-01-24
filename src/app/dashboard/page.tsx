@@ -29,13 +29,13 @@ export default function Dashboard() {
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
       {loading ? (
         <p>Loading...</p>
       ) : files.length === 0 ? (
         <p>No files uploaded yet.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {files.map(({ apkFileName, testCaseFileName }, index) => (
             <div key={index} className="p-4 border rounded-lg">
               <h3 className="text-lg font-medium">APK: {apkFileName}</h3>
@@ -63,3 +63,4 @@ export default function Dashboard() {
     </div>
   );
 }
+

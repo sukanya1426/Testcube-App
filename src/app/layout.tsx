@@ -31,14 +31,16 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <header className="flex justify-between px-4 py-2 bg-gray-100 shadow">
-            <h1 className="text-xl font-bold">test-cube</h1>
+            <h1 className="text-4xl font-bold">Test-Cube</h1>
             <div className="flex items-center space-x-4">
               <SignedIn>
-                <Link href="/dashboard" className="text-blue-500 hover:underline">
+                <Link href="/dashboard" className="text-1xl text-blue-500 hover:underline">
                   Dashboard
                 </Link>
               </SignedIn>
+              <div className="scale-115">
               <UserButton showName />
+              </div>
             </div>
           </header>
           <main className="flex items-center justify-center min-h-screen bg-gray-50">
