@@ -37,10 +37,8 @@ export default function RootLayout({
                 <Link href="/dashboard" className="text-1xl text-blue-500 hover:underline">
                   Dashboard
                 </Link>
-              </SignedIn>
-              <div className="scale-115">
-              <UserButton showName />
-              </div>
+              </SignedIn>           
+              <UserButton showName />            
             </div>
           </header>
           <main className="flex items-center justify-center min-h-screen bg-gray-50">
