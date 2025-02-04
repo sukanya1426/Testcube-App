@@ -1,56 +1,83 @@
-import formidable from 'formidable';
+import formidable, { File, Files } from 'formidable';
 import fs from 'fs';
 import path from 'path';
-import { NextRequest, NextResponse } from 'next/server';
+import { Readable } from 'stream';
+import { IncomingMessage } from 'http';
 
-// Ensure the upload directory exists
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 const uploadDir = path.join(process.cwd(), '/uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// Disable default body parsing by Next.js
-export const config = {
-  api: {
-    bodyParser: false, // Disable Next.js body parser for file handling
-  },
-};
-
-const parseForm = async (req: NextRequest): Promise<{ fields: formidable.Fields; files: formidable.Files }> => {
+const parseForm = (req: IncomingMessage): Promise<{ files: Files }> => {
   const form = formidable({
     uploadDir,
     keepExtensions: true,
-    maxFileSize: 100 * 1024 * 1024, // 100 MB size limit
+    maxFileSize: 100 * 1024 * 1024,
     filename: (_name, _ext, part) => `${Date.now()}_${part.originalFilename}`,
   });
 
   return new Promise((resolve, reject) => {
-    form.parse(req, (err, fields, files) => {
+    form.parse(req, (err, _fields, files) => {
       if (err) reject(err);
-      resolve({ fields, files });
+      resolve({ files });
     });
   });
 };
 
-export async function POST(req: NextRequest) {
+async function webStreamToNodeStream(webStream: ReadableStream): Promise<Readable> {
+  const reader = webStream.getReader();
+  const nodeStream = new Readable({
+    read() {
+      reader.read().then(({ done, value }) => {
+        if (done) {
+          this.push(null);
+        } else {
+          this.push(value);
+        }
+      });
+    },
+  });
+  return nodeStream;
+}
+
+export async function POST(req: Request) {
   try {
-    const { files } = await parseForm(req);
-    console.log('Files:', files);
+    const nodeStream = await webStreamToNodeStream(req.body as ReadableStream);
+
+    const incomingReq = Object.assign(nodeStream, {
+      headers: Object.fromEntries(req.headers),
+      method: req.method,
+      url: req.url,
+    }) as IncomingMessage;
+
+    const { files } = await parseForm(incomingReq);
 
     const uploadedFiles = Object.values(files)
-      .flatMap((file) => (Array.isArray(file) ? file : [file])) // Flatten if there are multiple files
+      .flatMap((file) => (Array.isArray(file) ? file : [file]))
       .map((f) => ({
-        name: f.originalFilename,
+        name: f.originalFilename || 'unknown',
         path: f.filepath,
+        type: f.mimetype,
       }));
 
-    if (uploadedFiles.length === 0) {
-      return NextResponse.json({ message: 'No files uploaded.' }, { status: 400 });
-    }
-
-    return NextResponse.json({ message: 'Files uploaded successfully', uploadedFiles });
+    return new Response(
+      JSON.stringify({
+        message: 'Files uploaded successfully',
+        uploadedFiles,
+      }),
+      { status: 200 }
+    );
   } catch (error) {
-    console.error('Upload error:', error);
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'File upload failed' }, { status: 500 });
+    return new Response(
+      JSON.stringify({ error: error instanceof Error ? error.message : 'File upload failed' }),
+      { status: 500 }
+    );
   }
 }
