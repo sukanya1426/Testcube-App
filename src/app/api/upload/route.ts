@@ -1,4 +1,4 @@
-import formidable, { File, Files } from 'formidable';
+import formidable, { Files } from 'formidable';
 import fs from 'fs';
 import path from 'path';
 import { Readable } from 'stream';
@@ -62,9 +62,9 @@ export async function POST(req: Request) {
     const uploadedFiles = Object.values(files)
       .flatMap((file) => (Array.isArray(file) ? file : [file]))
       .map((f) => ({
-        name: f.originalFilename || 'unknown',
-        path: f.filepath,
-        type: f.mimetype,
+        name: f?.originalFilename || 'unknown',
+        path: f?.filepath,
+        type: f?.mimetype,
       }));
 
     return new Response(
