@@ -63,8 +63,8 @@ export async function POST(req: Request) {
       .flatMap((file) => (Array.isArray(file) ? file : [file]))
       .map((f) => ({
         name: f?.originalFilename || 'unknown',
-        path: f?.filepath,
-        type: f?.mimetype,
+        path: f?.filepath || 'unknown',
+        type: f?.mimetype || 'unknown',
       }));
 
     return new Response(
