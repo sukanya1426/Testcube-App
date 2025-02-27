@@ -12,7 +12,7 @@ const sendEmailVerificationOTP = async (user) => {
         otp
     }).save();
 
-    const otpVerificationLink = `${process.env.FRONTEND_HOST}/account/verify-email`;
+    const otpVerificationLink = `${process.env.FRONTEND_HOST}/verify-email`;
 
     const mailerSend = new MailerSend({
         apiKey: process.env.MAIL_API_KEY,
