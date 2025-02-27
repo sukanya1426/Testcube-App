@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 interface FileData {
   apkFileName: string;
   testCaseFileName: string;
-  status: 'Pending' | 'Completed';  
+  status: "Pending" | "Completed";
 }
 
 export function Dashboard() {
@@ -15,11 +15,11 @@ export function Dashboard() {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await fetch('/api/user-files');
+        const response = await fetch("/api/user-files");
         const data = await response.json();
         setFiles(data);
       } catch (error) {
-        console.error('Error fetching files:', error);
+        console.error("Error fetching files:", error);
       } finally {
         setLoading(false);
       }
@@ -30,27 +30,23 @@ export function Dashboard() {
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
-      {/* Summary Boxes */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="p-4 bg-blue-500 text-white rounded-lg text-center">
-          <h2 className="text-lg font-semibold">Total Files</h2>
-          <p className="text-2xl">{files.length}</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="p-5 bg-white shadow-lg rounded-lg text-center">
+          <h2 className="text-lg font-semibold text-gray-700">Total Files</h2>
+          <p className="text-2xl font-bold text-blue-600">{files.length}</p>
         </div>
-        <div className="p-4 bg-yellow-500 text-white rounded-lg text-center">
-          <h2 className="text-lg font-semibold">Pending Tests</h2>
-          <p className="text-2xl">
-            {files.filter((file) => file.status === 'Pending').length}
-          </p>
+        <div className="p-5 bg-white shadow-lg rounded-lg text-center">
+          <h2 className="text-lg font-semibold text-gray-700">Pending Tests</h2>
+          <p className="text-2xl font-bold text-yellow-500">3</p>
         </div>
-        <div className="p-4 bg-green-500 text-white rounded-lg text-center">
-          <h2 className="text-lg font-semibold">Completed Tests</h2>
-          <p className="text-2xl">
-            {files.filter((file) => file.status === 'Completed').length}
-          </p>
+        <div className="p-5 bg-white shadow-lg rounded-lg text-center">
+          <h2 className="text-lg font-semibold text-gray-700">
+            Completed Tests
+          </h2>
+          <p className="text-2xl font-bold text-green-500">5</p>
         </div>
       </div>
 
-      {/* File Table */}
       {loading ? (
         <p>Loading...</p>
       ) : files.length === 0 ? (
@@ -71,10 +67,14 @@ export function Dashboard() {
                   <td className="p-2 border">{apkFileName}</td>
                   <td className="p-2 border">{testCaseFileName}</td>
                   <td className="p-2 border">
-                    {status === 'Completed' ? (
-                      <span className="text-green-600 font-semibold">Completed</span>
+                    {status === "Completed" ? (
+                      <span className="text-green-600 font-semibold">
+                        Completed
+                      </span>
                     ) : (
-                      <span className="text-yellow-600 font-semibold">Pending</span>
+                      <span className="text-yellow-600 font-semibold">
+                        Pending
+                      </span>
                     )}
                   </td>
                 </tr>
