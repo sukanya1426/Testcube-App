@@ -86,7 +86,9 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
               </div>
               {error && <p className="text-red-500 text-sm">{error}</p>}
               <Button type="submit" className="w-full">
+                <Link to ="/file-upload">
                 Login
+                </Link>
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

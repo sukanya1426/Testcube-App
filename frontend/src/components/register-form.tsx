@@ -31,7 +31,7 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
       const response = await fetch("http://localhost:3000/user/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, confirmPassword}),
       });
 
       const data = await response.json();
