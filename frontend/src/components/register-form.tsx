@@ -11,7 +11,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function RegisterForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
+export function RegisterForm({
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -31,14 +34,14 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
       const response = await fetch("http://localhost:3000/user/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, confirmPassword}),
+        body: JSON.stringify({ email, password, confirmPassword }),
       });
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Registration failed");
 
-      console.log("User registered successfully:", data);
-      navigate("/"); // Redirect to login or home page
+      console.log("User Created successfully:", data);
+      navigate("/verify-email", { state: { email: email } });
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -46,7 +49,6 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
         setError("An unknown error occurred.");
       }
     }
-    
   };
 
   return (
@@ -93,10 +95,14 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
                 />
               </div>
               {error && <p className="text-red-500 text-sm">{error}</p>}
-              <Button type="submit" className="w-full">Sign Up</Button>
+              <Button type="submit" className="w-full">
+                
+                  Sign Up
+               
+              </Button>
               <div className="mt-4 text-center text-sm">
                 Already have an account?{" "}
-                <Link to="/" className="underline underline-offset-4">
+                <Link to="/login" className="underline underline-offset-4">
                   Login
                 </Link>
               </div>

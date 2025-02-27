@@ -33,7 +33,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       if (!response.ok) throw new Error(data.message || "Login failed");
 
       console.log("User logged in successfully:", data);
-      navigate("/dashboard"); // Redirect to dashboard or homepage
+      navigate("/"); // Redirect to dashboard or homepage
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -86,9 +86,9 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
               </div>
               {error && <p className="text-red-500 text-sm">{error}</p>}
               <Button type="submit" className="w-full">
-                <Link to ="/file-upload">
+                
                 Login
-                </Link>
+                
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
