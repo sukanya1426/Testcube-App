@@ -23,12 +23,7 @@ export function RegisterForm({
 
   const registerUser = async (event: React.FormEvent) => {
     event.preventDefault();
-    setError(null); // Reset error state
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
+    setError(null);
 
     try {
       const response = await fetch("http://localhost:3000/user/register", {

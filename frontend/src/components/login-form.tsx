@@ -11,29 +11,23 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/auth-context";
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const loginUser = async (event: React.FormEvent) => {
     event.preventDefault();
-    setError(null); // Reset error state
+    setError(null);
 
     try {
-      const response = await fetch("http://localhost:3000/user/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Login failed");
-
+      const data = await login(email, password);
       console.log("User logged in successfully:", data);
-      navigate("/"); // Redirect to dashboard or homepage
+      navigate("/");
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -86,9 +80,9 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
               </div>
               {error && <p className="text-red-500 text-sm">{error}</p>}
               <Button type="submit" className="w-full">
-                
+
                 Login
-                
+
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

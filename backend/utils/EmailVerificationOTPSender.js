@@ -18,7 +18,7 @@ const sendEmailVerificationOTP = async (user) => {
         apiKey: process.env.MAIL_API_KEY,
     });
 
-    const sentFrom = new Sender("MS_FHmjPl@trial-z86org8p7d1lew13.mlsender.net");
+    const sentFrom = new Sender(process.env.MAIL_SENDER || "");
 
     const recipients = [
         new Recipient(user.email)
