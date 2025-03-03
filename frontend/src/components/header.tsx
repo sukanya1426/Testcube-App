@@ -1,7 +1,11 @@
 
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/auth-context";
 
 export function Header() {
+
+  const { user } = useAuth(); 
+
   return (
     <header className="bg-gray-900 text-white shadow-md">
       <div className="container mx-auto flex justify-between items-center p-4">
@@ -23,7 +27,7 @@ export function Header() {
         
         <div className="relative group">
           <button className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600">
-            <span className="text-white font-bold">User</span>
+            <span className="text-white font-bold">{user?.email.charAt(0)}</span>
           </button>
 
        

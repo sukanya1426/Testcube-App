@@ -4,6 +4,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (email: string, password: string) => void;
   logout: () => void;
+  user: {id: string, email: string} | undefined
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -12,8 +13,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     localStorage.getItem("is_authenticated_to_testcube") === "true"
   );
+  const [user, setUser] = useState<{id: string, email: string}>();
 
   const login = async (email: string, password: string) => {
+
     const response = await fetch("http://localhost:3000/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -22,7 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Login failed");
-      console.log(data.is_authenticated);
+      setUser(data.user);
       setIsAuthenticated(data.is_authenticated);
       localStorage.setItem("is_authenticated_to_testcube", data.is_authenticated);
       return data;
@@ -34,7 +37,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, user }}>
       {children}
     </AuthContext.Provider>
   );
