@@ -1,8 +1,13 @@
 import { Dashboard } from "@/components/dashboard-form"
+import { Header } from "@/components/header"
 
 export default function DashboardPage() {
   return (
-    <Dashboard/>
+    <div>
+      <Header/>
+      <Dashboard/>
+    </div>
+  
   )
 }
 
