@@ -1,6 +1,5 @@
-"use client";
-
 import React, { useState } from "react";
+import axios from "axios";
 
 export  function FileUplaoad() {
   const [apkFile, setApkFile] = useState<File | null>(null);
@@ -38,11 +37,17 @@ export  function FileUplaoad() {
       formData.append("apkFile", apkFile);
       formData.append("txtFile", txtFile);
 
-      const response = await fetch("/api/upload", { method: "POST", body: formData });
-      if (!response.ok) throw new Error(await response.text() || "File upload failed.");
+      console.log(formData)
+      const response = await axios.post("http://localhost:3000/user/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response.data);
+      // if (!response.ok) throw new Error(await response.text() || "File upload failed.");
 
-      const data = await response.json();
-      setUploadStatus({ message: data.message, success: true });
+      // const data = await response.json();
+      // setUploadStatus({ message: data.message, success: true });
     } catch (error) {
       setUploadStatus({ message: error instanceof Error ? error.message : "Upload failed.", success: false });
     } finally {
