@@ -16,7 +16,7 @@ export function Header() {
 
         {/* Navigation Links */}
         <nav className="space-x-6 hidden md:flex">
-          <Link to="/dashboard" className="hover:text-gray-400">
+          <Link to="/" className="hover:text-gray-400">
             Dashboard
           </Link>
           <Link to="/file-upload" className="hover:text-gray-400">
@@ -27,7 +27,7 @@ export function Header() {
         
         <div className="relative group">
           <button className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600">
-            <span className="text-white font-bold">{user?.email.charAt(0)}</span>
+            <span className="text-white font-bold">{user?.email.charAt(0).toUpperCase()}</span>
           </button>
 
        
@@ -35,9 +35,11 @@ export function Header() {
             <Link to="/profile" className="block px-4 py-2 hover:bg-gray-200">
               Profile
             </Link>
+            <Link to="/login" className="block px-4 py-2 hover:bg-gray-200">
             <button className="block w-full text-left px-4 py-2 hover:bg-gray-200">
-              Logout
+             Logout
             </button>
+            </Link>
           </div>
         </div>
       </div>

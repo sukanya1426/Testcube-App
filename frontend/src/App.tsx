@@ -18,10 +18,10 @@ export default function App() {
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/verify-email" element={<OtpPage />} />
 
-          {/* <Route element={<ProtectedRoute />}> */}
+          <Route element={<ProtectedRoute />}>
            
             <Route path="/" element={<DashboardPage />} />
-          {/* </Route> */}
+          </Route>
           <Route element={<ProtectedRoute />}>
            
             <Route path="/file-upload" element={<FileUploadPage />} />
