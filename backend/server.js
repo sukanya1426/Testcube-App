@@ -4,9 +4,7 @@ import express from 'express';
 import connectDb from './config/DbConfig.js';
 import cors from 'cors';
 import userRoute from './routes/UserRoute.js';
-
-// const upload
-
+import UserController from './controllers/UserController.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +23,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/user', userRoute);
 
-app.listen(PORT, ()=> {
+app.listen(PORT, () => {
     console.log(`Server in running on port ${PORT}`);
 });

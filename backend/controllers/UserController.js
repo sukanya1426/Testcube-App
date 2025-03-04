@@ -8,6 +8,7 @@ import setTokenCookies from '../utils/SetTokenCookies.js';
 import fs from "fs";
 import multer from 'multer';
 import ApkModel from '../models/Apk.js';
+import io from 'socket.io-client'
 
 
 class UserController {
@@ -204,21 +205,21 @@ class UserController {
         filename: (req, file, cb) => {
             const prefix = this.parseEmail(req.headers.email);
             let fileName = `1${prefix}-${file.originalname}`;
-            
-            if(!fs.existsSync("uploads/" + prefix)){
+
+            if (!fs.existsSync("uploads/" + prefix)) {
                 fs.mkdirSync("uploads/" + prefix);
             }
 
             let version = 1;
 
-            while(fs.existsSync(`uploads/${prefix}/${fileName}`)){
+            while (fs.existsSync(`uploads/${prefix}/${fileName}`)) {
                 version++;
                 fileName = `${version}${prefix}-${file.originalname}`;
             }
 
-            if(file.originalname.endsWith(".apk")){
+            if (file.originalname.endsWith(".apk")) {
                 req.apkName = fileName;
-            }else{
+            } else {
                 req.txtName = fileName;
             }
             req.version = version;
@@ -232,7 +233,7 @@ class UserController {
     ]);
 
     static uploadFiles = async (req, res) => {
-        try{
+        try {
             await new Promise((resolve, reject) => {
                 this.upload(req, res, (err) => {
                     if (err) return reject(err);
@@ -240,44 +241,57 @@ class UserController {
                 });
             });
 
-            if(!req.files){
+            if (!req.files) {
                 return res.status(400).json({ message: "No files uploaded." });
             }
 
-            if(!req.files.apkFile){
+            if (!req.files.apkFile) {
                 return res.status(400).json({ message: "APK file is required." });
             }
 
-            if(!req.files.txtFile){
+            if (!req.files.txtFile) {
                 return res.status(400).json({ message: "TXT file is required." });
             }
-            
-            const {apkName, txtName, version} = req;
-            const {email} = req.headers;
 
-            const user = await UserModel.findOne({email});
+            const { apkName, txtName, version } = req;
+            const { email } = req.headers;
 
-            if(!user){
+            const user = await UserModel.findOne({ email });
+
+            if (!user) {
                 return res.status(404).json({ message: "User not found." });
             }
 
             const apkLink = `uploads/${this.parseEmail(email)}/${apkName}`;
 
-            await new ApkModel({
+            const apk = await new ApkModel({
                 name: apkName,
                 userId: user._id,
                 version,
                 apkLink,
-            }).save();
-    
-            return res.json({ message: "Files uploaded successfully!"});
-        }catch(err){
+            });
+
+            await apk.save();
+
+            this.startDroidbot(user._id, apk._id);
+
+            return res.json({ message: "Files uploaded successfully!" });
+        } catch (err) {
             console.log(err);
             return res.status(500).json({
                 message: "Internal server error. Please try again."
             })
         }
     };
+
+    static startDroidbot = async (userId, apkId) => {
+        const socket = io.connect("http://localhost:4000");
+
+        console.log("Starting Droidbot...");
+
+        socket.emit("start_droidbot", { userId, apkId });
+    }
+
 }
 
 

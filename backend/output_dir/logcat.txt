@@ -1,0 +1,126 @@
+--------- beginning of main
+03-05 00:44:53.507  1458 20449 I Icing   : Indexing done com.google.android.gms-apps
+03-05 00:44:53.507  1458 20449 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
+03-05 00:44:53.508  1458 20449 I Icing   : Indexing done com.google.android.gms-apps
+03-05 00:44:53.557  1532  5103 I AiAiEcho: Settings cha with uri: content://settings/secure/enabled_input_methods
+03-05 00:44:53.561  1532  5103 I AiAiEcho: Settings cha with uri: content://settings/secure/input_methods_subtype_history
+03-05 00:44:53.561  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.561  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.561  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.561  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.561  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.561  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.563  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.563  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.563  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.564  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.564  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.564  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.564  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.565  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.565  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.565  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.565  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.565  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.565  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.566  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.566  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.566  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.566  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.566  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.567  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.567  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.567  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.567  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.567  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.567  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+--------- beginning of system
+03-05 00:44:53.668   523   523 I NotificationService: Cannot find enqueued record for key: 0|com.google.android.apps.wellbeing|174344743|null|10113
+03-05 00:44:53.672  1532 17650 I AiAiEcho: Settings cha with uri: content://settings/secure/input_methods_subtype_history
+03-05 00:44:53.675  1532 17650 I AiAiEcho: Settings cha with uri: content://settings/secure/selected_input_method_subtype
+03-05 00:44:53.675  1532 17650 I AiAiEcho: Settings cha with uri: content://settings/secure/default_input_method
+03-05 00:44:53.676  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.676  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.676  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.676  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.676  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.676  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.676  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.676  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.678  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.678  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.678  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.678  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.678  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.678  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.678  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.678  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.678  1532  1612 I AiAiEcho: Predicting[0]: 
+03-05 00:44:53.678  1532  1612 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata: 
+03-05 00:44:53.678  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.678  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.678  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.679  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.679  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.679  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.679  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.679  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.679  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.679  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.679  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.679  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0
+03-05 00:44:53.680  1532  1612 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface media_data_manager with targets# 0
+03-05 00:44:53.691 15489 15489 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3227 
+03-05 00:44:53.692 15489 15489 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2087 repeatCheckTimes = 0, unlocked = true
+03-05 00:44:53.698   523   915 W InputManager-JNI: Input channel object '10a2f56 InputMethod (client)' was disposed without first being removed with the input manager!
+03-05 00:44:53.705 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension.maybeDestroyExistingKeyboardGroupManager():512 Destroy existing keyboard group manager in csi
+03-05 00:44:53.705 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension.createKeyboardGroupManagerListenableFuture():124 Create keyboard group manager listenable future in csi
+03-05 00:44:53.706 15489 20391 I KeyboardGroupDefParser: KeyboardGroupDefParser.parseKeyboardGroupDef():88 parseKeyboardGroupDef() 2132214033 -> 0_resource_name_obfuscated : WaitTime = 0 ms : RunTime = 1 ms
+03-05 00:44:53.706 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension.maybeDestroyExistingKeyboardGroupManager():512 Destroy existing keyboard group manager in ebn
+03-05 00:44:53.706 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension.createKeyboardGroupManagerListenableFuture():124 Create keyboard group manager listenable future in ebn
+03-05 00:44:53.706 15489 20392 I KeyboardGroupDefParser: KeyboardGroupDefParser.parseKeyboardGroupDef():88 parseKeyboardGroupDef() 2132214024 -> 0_resource_name_obfuscated : WaitTime = 0 ms : RunTime = 0 ms
+03-05 00:44:53.706 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension.maybeDestroyExistingKeyboardGroupManager():512 Destroy existing keyboard group manager in een
+03-05 00:44:53.706 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension.createKeyboardGroupManagerListenableFuture():124 Create keyboard group manager listenable future in een
+03-05 00:44:53.706 15489 20391 I KeyboardGroupDefParser: KeyboardGroupDefParser.parseKeyboardGroupDef():88 parseKeyboardGroupDef() 2132214034 -> 0_resource_name_obfuscated : WaitTime = 0 ms : RunTime = 0 ms
+03-05 00:44:53.706 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension.maybeDestroyExistingKeyboardGroupManager():512 Destroy existing keyboard group manager in eco
+03-05 00:44:53.706 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension.createKeyboardGroupManagerListenableFuture():124 Create keyboard group manager listenable future in eco
+03-05 00:44:53.707 15489 20392 I KeyboardGroupDefParser: KeyboardGroupDefParser.parseKeyboardGroupDef():88 parseKeyboardGroupDef() 2132214027 -> 0_resource_name_obfuscated : WaitTime = 0 ms : RunTime = 1 ms
+03-05 00:44:53.707 15489 15489 I DeviceModeUtil: DeviceModeUtil.getDeviceMode():122 Get device mode phone by ui mode:1 and smallestScreenWidthDp:411
+03-05 00:44:53.707 15489 15489 I KeyboardModeManager: KeyboardModeManager.setInputView():364 setInputView() : supportsOneHandedMode=true
+03-05 00:44:53.708 15489 15489 I NormalModeController: NormalModeController.getKeyboardBodyViewHolderPaddingBottom():116 currentPrimeKeyboardType:SOFT systemPaddingBottom:-1
+03-05 00:44:53.709 15489 15489 I KeyboardModeManager: KeyboardModeManager.setInputView():356 setInputView() : entry=hwn{languageTag=en-US, variant=qwerty, hasLocalizedResources=true, conditionCacheKey=_device=phone_device_size=default_enable_adaptive_text_editing=true_enable_inline_suggestions_on_client_side=false_enable_large_tablet_batch_1=false_enable_large_tablet_batch_2=false_enable_more_candidates_view_for_multilingual=false_enable_nav_redesign=false_enable_number_row=false_enable_preemptive_decode=true_enable_secondary_symbols=false_expressions=normal_four_or_more_letter_rows=false_keyboard_mode=normal_language=en-US_orientation=portrait_physical_keyboard=qwerty_show_secondary_digits=true_show_suggestions=true_split_with_duplicate_keys=true_variant=qwerty, imeDef.stringId=ime_english_united_states, imeDef.className=com.google.android.apps.inputmethod.libs.latin5.LatinIme, imeDef.languageTag=en-US}
+03-05 00:44:53.711 15489 15489 I EmojifyExtensionImpl: EmojifyExtensionImpl.onDestroy():657 Destroying Emojify extension crj@e91b32b.
+03-05 00:44:53.711 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension.maybeDestroyExistingKeyboardGroupManager():512 Destroy existing keyboard group manager in csi
+03-05 00:44:53.711 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension.maybeDestroyExistingKeyboardGroupManager():512 Destroy existing keyboard group manager in ebn
+03-05 00:44:53.711 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension.maybeDestroyExistingKeyboardGroupManager():512 Destroy existing keyboard group manager in een
+03-05 00:44:53.713 15489 15489 I KeyboardViewController: KeyboardViewController.clearSubViewControllerInternal():428 Clears keyboard sub view controller for keyboardType: null, viewType: HEADER, viewId: 2131428255(#0x7f0b039f),which has not been set.
+03-05 00:44:53.713 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension.maybeDestroyExistingKeyboardGroupManager():512 Destroy existing keyboard group manager in eco
+03-05 00:44:53.714 15489 15489 I InputContextSharingModule: InputContextSharingModule.onDestroy():52 onDestroy()
+03-05 00:44:53.714 15489 15489 I OnDevicePackDownloadModule: OnDevicePackDownloadModule.onDestroy():94 onDestroy()
+03-05 00:44:53.714 15489 20392 I JapaneseMozcExtension: JapaneseMozcExtension.onDestroyServiceInternal():79 onDestroyServiceInternal()
+03-05 00:44:53.715 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension$3.onSuccess():525 KeyboardGroupManager destroyed in csi.
+03-05 00:44:53.715 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension$3.onSuccess():525 KeyboardGroupManager destroyed in ebn.
+03-05 00:44:53.715 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension$3.onSuccess():525 KeyboardGroupManager destroyed in een.
+03-05 00:44:53.715 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension$3.onSuccess():525 KeyboardGroupManager destroyed in eco.
+03-05 00:44:53.715 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension$3.onFailure():533 Failed to load KeyboardGroupManager in csi.
+03-05 00:44:53.715 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension$3.onFailure():533 Failed to load KeyboardGroupManager in ebn.
+03-05 00:44:53.715 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension$3.onFailure():533 Failed to load KeyboardGroupManager in een.
+03-05 00:44:53.715 15489 15489 I AbstractOpenableExtension: AbstractOpenableExtension$3.onFailure():533 Failed to load KeyboardGroupManager in eco.
+03-05 00:44:53.796 21188 21285 W Parcel  : Expecting binder but got null!
+03-05 00:44:53.853   713   713 I vol.VolumeDialogImpl: mDialog.dismiss() reason: volume_controller from: com.android.systemui.volume.VolumeDialogImpl$7.onDismissRequested:2
+03-05 00:44:53.861  1215  1885 W Parcel  : Expecting binder but got null!
+03-05 00:44:53.892  1215  1215 I ContentCaptureHelper: Setting logging level to OFF
