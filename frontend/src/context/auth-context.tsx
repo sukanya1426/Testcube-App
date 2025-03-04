@@ -2,9 +2,9 @@ import { createContext, useContext, useState, ReactNode } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (email: string, password: string) => void;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  user: {id: string, email: string} | undefined
+  user: { id: string; email: string } | undefined;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -13,27 +13,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     localStorage.getItem("is_authenticated_to_testcube") === "true"
   );
-  const [user, setUser] = useState<{id: string, email: string}>();
+
+  const [user, setUser] = useState<{ id: string; email: string } | undefined>(
+    localStorage.getItem("testcube_user")
+      ? JSON.parse(localStorage.getItem("testcube_user")!)
+      : undefined
+  );
 
   const login = async (email: string, password: string) => {
-
     const response = await fetch("http://localhost:3000/user/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Login failed");
-      setUser(data.user);
-      setIsAuthenticated(data.is_authenticated);
-      localStorage.setItem("is_authenticated_to_testcube", data.is_authenticated);
-      return data;
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || "Login failed");
+
+    setUser(data.user);
+    setIsAuthenticated(true);
+
+    localStorage.setItem("is_authenticated_to_testcube", "true");
+    localStorage.setItem("testcube_user", JSON.stringify(data.user));
   };
 
   const logout = () => {
     setIsAuthenticated(false);
+    setUser(undefined);
     localStorage.removeItem("is_authenticated_to_testcube");
+    localStorage.removeItem("testcube_user");
   };
 
   return (

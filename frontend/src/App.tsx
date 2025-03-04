@@ -17,16 +17,12 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/verify-email" element={<OtpPage />} />
-
           <Route element={<ProtectedRoute />}>
-           
             <Route path="/" element={<DashboardPage />} />
           </Route>
           <Route element={<ProtectedRoute />}>
-           
             <Route path="/file-upload" element={<FileUploadPage />} />
           </Route>
-
         </Routes>
       </Router>
     </AuthProvider>

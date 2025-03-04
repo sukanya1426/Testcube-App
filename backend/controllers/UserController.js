@@ -5,9 +5,9 @@ import bcrypt from 'bcrypt';
 import VerificationEmailModel from '../models/VerificationEmail.js';
 import generateAccessToken from '../utils/GenerateAccessToken.js';
 import setTokenCookies from '../utils/SetTokenCookies.js';
-import upload from "../utils/fileUpload.js";
 import fs from "fs";
 import multer from 'multer';
+import ApkModel from '../models/Apk.js';
 
 
 class UserController {
@@ -191,12 +191,38 @@ class UserController {
         }
     }
 
+    static parseEmail = (email) => {
+        const prefix = email.split('@')[0];
+        return prefix;
+    }
+
     static storage = multer.diskStorage({
         destination: (req, file, cb) => {
-            cb(null, "uploads/"); // Save files in the 'uploads' folder
+            const subFolder = this.parseEmail(req.headers.email);
+            cb(null, "uploads/" + subFolder);
         },
         filename: (req, file, cb) => {
-            cb(null, `${Date.now()}-${file.originalname}`); // Unique filenames
+            const prefix = this.parseEmail(req.headers.email);
+            let fileName = `1${prefix}-${file.originalname}`;
+            
+            if(!fs.existsSync("uploads/" + prefix)){
+                fs.mkdirSync("uploads/" + prefix);
+            }
+
+            let version = 1;
+
+            while(fs.existsSync(`uploads/${prefix}/${fileName}`)){
+                version++;
+                fileName = `${version}${prefix}-${file.originalname}`;
+            }
+
+            if(file.originalname.endsWith(".apk")){
+                req.apkName = fileName;
+            }else{
+                req.txtName = fileName;
+            }
+            req.version = version;
+            cb(null, fileName);
         },
     });
 
@@ -206,45 +232,51 @@ class UserController {
     ]);
 
     static uploadFiles = async (req, res) => {
-        this.upload(req, res, (err) => {
-            if (err) {
-                return res.status(500).json({ message: "File upload failed", error: err });
+        try{
+            await new Promise((resolve, reject) => {
+                this.upload(req, res, (err) => {
+                    if (err) return reject(err);
+                    resolve();
+                });
+            });
+
+            if(!req.files){
+                return res.status(400).json({ message: "No files uploaded." });
             }
 
-            if (!req.files || !req.files.apkFile || !req.files.txtFile) {
-                return res.status(400).json({ message: "Both APK and TXT files are required!" });
+            if(!req.files.apkFile){
+                return res.status(400).json({ message: "APK file is required." });
             }
 
-            console.log("Uploaded Files:", req.files);
-            res.json({ message: "Files uploaded successfully!", files: req.files });
-        });
-        // try {
-        //   if (!req.files || req.files.length === 0) {
-        //     return res.status(400).json({ message: "No files uploaded." });
-        //   }
+            if(!req.files.txtFile){
+                return res.status(400).json({ message: "TXT file is required." });
+            }
+            
+            const {apkName, txtName, version} = req;
+            const {email} = req.headers;
 
+            const user = await UserModel.findOne({email});
 
-        //   const apkFile = req.files["apkFile"] ? req.files["apkFile"][0] : null;
-        //   const txtFile = req.files["txtFile"] ? req.files["txtFile"][0] : null;
+            if(!user){
+                return res.status(404).json({ message: "User not found." });
+            }
 
-        //   if (!apkFile || !txtFile) {
+            const apkLink = `uploads/${this.parseEmail(email)}/${apkName}`;
 
-        //     if (apkFile) fs.unlinkSync(apkFile.path);
-        //     if (txtFile) fs.unlinkSync(txtFile.path);
-        //     return res.status(400).json({ message: "Both APK and TXT files must be uploaded." });
-        //   }
-
-        //   return res.status(200).json({
-        //     message: "Files uploaded successfully.",
-        //     files: {
-        //       apk: { filename: apkFile.filename, path: apkFile.path },
-        //       txt: { filename: txtFile.filename, path: txtFile.path },
-        //     },
-        //   });
-        // } catch (err) {
-        //   console.error(err);
-        //   return res.status(500).json({ message: "Internal server error. Please try again." });
-        // }
+            await new ApkModel({
+                name: apkName,
+                userId: user._id,
+                version,
+                apkLink,
+            }).save();
+    
+            return res.json({ message: "Files uploaded successfully!"});
+        }catch(err){
+            console.log(err);
+            return res.status(500).json({
+                message: "Internal server error. Please try again."
+            })
+        }
     };
 }
 

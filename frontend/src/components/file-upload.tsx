@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useAuth } from "@/context/auth-context";
 
 export  function FileUplaoad() {
   const [apkFile, setApkFile] = useState<File | null>(null);
   const [txtFile, setTxtFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<{ message: string; success: boolean } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const {user} = useAuth();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, type: "apk" | "txt") => {
     if (event.target.files && event.target.files[0]) {
@@ -37,17 +39,17 @@ export  function FileUplaoad() {
       formData.append("apkFile", apkFile);
       formData.append("txtFile", txtFile);
 
-      console.log(formData)
       const response = await axios.post("http://localhost:3000/user/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "email": user?.email || "base",
         },
       });
-      console.log(response.data);
-      // if (!response.ok) throw new Error(await response.text() || "File upload failed.");
+      if (response.status != 200) throw new Error(await response.data.message || "File upload failed.");
 
-      // const data = await response.json();
-      // setUploadStatus({ message: data.message, success: true });
+      setUploadStatus({ message: response.data.message, success: true });
+      setApkFile(null);
+      setTxtFile(null);
     } catch (error) {
       setUploadStatus({ message: error instanceof Error ? error.message : "Upload failed.", success: false });
     } finally {

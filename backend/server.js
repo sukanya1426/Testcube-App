@@ -21,6 +21,7 @@ const CORS_OPTIONS = {
 app.use(cors(CORS_OPTIONS));
 connectDb(DATABASE_URL);
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/user', userRoute);
 
