@@ -9,6 +9,9 @@ import fs from "fs";
 import multer from 'multer';
 import ApkModel from '../models/Apk.js';
 import io from 'socket.io-client'
+import refreshAccessToken from '../utils/RefreshAccessToken.js';
+import verifyRefreshToken from '../utils/VerifyRefreshToken.js';
+import TestCaseModel from '../models/TestCase.js'
 
 
 class UserController {
@@ -290,6 +293,68 @@ class UserController {
         console.log("Starting Droidbot...");
 
         socket.emit("start_droidbot", { userId, apkId });
+    }
+
+    static getNewAccessToken = async (req, res) => {
+        try {
+            const { newAccessToken, newRefreshToken, newAccessTokenExp, newRefreshTokenExp } = await refreshAccessToken(req, res)
+
+            setTokenCookies(res, newAccessToken, newRefreshToken, newAccessTokenExp, newRefreshTokenExp)
+
+            res.status(200).send({
+                message: "New tokens generated",
+                access_token: newAccessToken,
+                refresh_token: newRefreshToken,
+                access_token_exp: newAccessTokenExp
+            });
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Unable to generate new token, please try again later" });
+        }
+    }
+
+    static getProfile = async (req, res) => {
+        res.send({ "user": req.user })
+    }
+
+    static getFiles = async (req, res) => {
+        try {
+            const refreshToken = req.cookies.refreshToken;
+            const { tokenDetails, error } = await verifyRefreshToken(refreshToken);
+            const apks = await ApkModel.find({ userId: tokenDetails._id });
+            const data = {
+                totalApks: apks.length,
+                pending: apks.filter(apk => apk.isFinished === false).length,
+                completed: apks.filter(apk => apk.isFinished === true).length,
+                apks: apks.map(apk => {
+                    return {
+                        id: apk._id,
+                        name: apk.name,
+                    }
+                })
+            };
+            return res.status(200).json({ message: "Files fetched successfully!", data });
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: "Internal server error. Please try again."
+            })
+        }
+    }
+
+    static getReport = async (req, res) => {
+        try {
+            const { apkId, userId } = req.body;
+            console.log(req.body);
+            const testCases = await TestCaseModel.find({ userId, apkId });
+            return res.status(200).json({ message: "Report fetched successfully!", testCases });
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: "Internal server error. Please try again."
+            })
+        }
     }
 
 }

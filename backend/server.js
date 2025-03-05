@@ -4,8 +4,9 @@ import express from 'express';
 import connectDb from './config/DbConfig.js';
 import cors from 'cors';
 import userRoute from './routes/UserRoute.js';
-import UserController from './controllers/UserController.js';
-
+import cookieParser from 'cookie-parser';
+import passport from 'passport';
+import './config/passport-jwt-strategy.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DATABASE_URL = process.env.DATABASE_URL || '';
@@ -15,11 +16,12 @@ const CORS_OPTIONS = {
     optionsSuccessStatus: 200
 };
 
-
+app.use(cookieParser());
 app.use(cors(CORS_OPTIONS));
 connectDb(DATABASE_URL);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
 app.use('/user', userRoute);
 

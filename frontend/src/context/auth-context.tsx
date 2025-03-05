@@ -4,7 +4,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  user: { id: string; email: string } | undefined;
+  user: { id: string; email: string } | undefined,
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
+      credentials: "include",
     });
 
     const data = await response.json();
@@ -36,6 +37,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("is_authenticated_to_testcube", "true");
     localStorage.setItem("testcube_user", JSON.stringify(data.user));
   };
+
+  const getUser = async () => {
+    const response = await fetch("http://localhost:3000/user/profile");
+    const data = await response.json();
+    console.log(data);
+  }
 
   const logout = () => {
     setIsAuthenticated(false);

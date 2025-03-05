@@ -4,7 +4,7 @@ import RefreshTokenModel from '../models/RefreshToken.js';
 const generateAccessToken = async (user) => {
     try{
         const payload = {_id: user._id};
-        const accessTokenExp = Math.floor(Date.now() / 1000) + 300;
+        const accessTokenExp = Math.floor(Date.now() / 1000) + 15 * 60;
 
         const accessToken = jwt.sign(
             {...payload, exp: accessTokenExp},

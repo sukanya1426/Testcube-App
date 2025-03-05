@@ -30,7 +30,7 @@ let currentlyRunning = false;
 
 const startDroidbot = () => {
     console.log("Starting droidbot...")
-    const process = spawn("bash", ["-c", "cd && droidbot -a /home/mahdiya/Downloads/test.apk -o output_dir"]);
+    const process = spawn("bash", ["-c", "cd && droidbot -a /home/saimon/Downloads/test.apk -o output_dir"]);
 
     process.stdout.on("data", (data) => {
         // console.log(`stdout: ${data}`);
@@ -68,8 +68,11 @@ io.on('connection', (socket) => {
         if(!running) return;
         const inputs = await InputModel.find({userId: running.userId, apkId: running.apkId});
         console.log(inputs);
-        const testCase = new TestCaseModel({userId: running.userId, apkId: running.apkId, verdict: data.data.verdict, response: data.data.response});
+        const testCase = new TestCaseModel({userId: running.userId, apkId: running.apkId, verdict: data.data.verdict, response: data.data.response, inputs: inputs.map(input => input.toObject())});
         await testCase.save();
+        inputs.forEach(async (element) => {
+            await InputModel.deleteOne({_id: element._id});
+        });
     });
 
     socket.on('package', async (data) => {
