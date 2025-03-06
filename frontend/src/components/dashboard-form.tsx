@@ -3,7 +3,7 @@ import { parseFileName } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
-import { Link, useNavigate } from "react-router-dom";
+import ReportForm, { TestCase } from "./report-form";
 
 interface FileData {
   totalApks: number;
@@ -16,6 +16,8 @@ export function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [fileData, setFileData] = useState<FileData | null>(null);
   const { user } = useAuth();
+  const [showReport, setShowReport] = useState(false);
+  const [testCases, setTestCases] = useState<TestCase[]>([]);
 
   useEffect(() => {
     if (user) {
@@ -42,7 +44,6 @@ export function Dashboard() {
 
   const handleSeeReport = async (apkId: string) => {
     try {
-      console.log(apkId, user?.id);
       const response = await fetch(`http://localhost:3000/user/report`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -50,8 +51,19 @@ export function Dashboard() {
         credentials: "include",
       });
       const data = await response.json();
-      console.log(data);
+      const dummy = await data.testCases.map((testCase: any) => ({
+        userId: testCase.userId,
+        apkId: testCase.apkId,
+        verdict: testCase.verdict,
+        response: testCase.response,
+        inputs: testCase.inputs.map((input: any) => ({
+          field: input.field,
+          text: input.text,
+        })),
+      }))
+      setTestCases(dummy);
       toast.success("Report fetched successfully!");
+      setShowReport(true);
     } catch (error) {
       console.error("Error fetching report:", error);
       toast.error("Failed to fetch report.");
@@ -59,7 +71,7 @@ export function Dashboard() {
   };
 
   return (
-    <div className="h-screen w-screen p-5 bg-white rounded-lg shadow-md">
+    <div className="h-full w-screen p-5 bg-white rounded-lg shadow-md">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="p-5 bg-white shadow-lg rounded-lg text-center">
           <h2 className="text-lg font-semibold text-gray-700">Total Files</h2>
@@ -83,7 +95,10 @@ export function Dashboard() {
         <p>No files uploaded yet.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full border border-gray-200">
+          {showReport ? (
+            <ReportForm testCases={testCases} onClose={() => {setShowReport(false)}}/>
+          ): (
+            <table className="w-full border border-gray-200">
             <thead>
               <tr className="bg-gray-100">
                 <th className="p-2 border">APK Files</th>
@@ -96,16 +111,15 @@ export function Dashboard() {
                     <div className="flex justify-center gap-20 items-center">
                       <p>{parseFileName(apk.name)}</p>
                       <Button onClick={() => handleSeeReport(apk.id)}>
-                        <Link to="/report" className="underline underline-offset-4">
                         See Report
-                        </Link>
-                        See Report</Button>
+                      </Button>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          )}
         </div>
       )}
     </div>
