@@ -59,7 +59,7 @@ export function Dashboard() {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md">
+    <div className="h-screen w-screen p-5 bg-white rounded-lg shadow-md">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="p-5 bg-white shadow-lg rounded-lg text-center">
           <h2 className="text-lg font-semibold text-gray-700">Total Files</h2>
@@ -78,7 +78,7 @@ export function Dashboard() {
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+        <p className="text-center">Loading...</p>
       ) : !fileData ? (
         <p>No files uploaded yet.</p>
       ) : (

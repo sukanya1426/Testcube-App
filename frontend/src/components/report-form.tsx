@@ -44,7 +44,7 @@ const ReportForm = () => {
         ],
       },
       {
-        userId: "user123", 
+        userId: "user123",
         apkId: "apk567",
         verdict: "Failed",
         response: "Invalid input detected in password field.",
@@ -82,10 +82,10 @@ const ReportForm = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-2xl font-bold text-center ">Test Case Report</h2>
-      <h4 className="text-sm font-bold mb-6 text-center text-gray-700">
-         User ID: <span className="text-gray-700">{userId}</span> and APK ID: <span className="text-gray-700">{apkId}</span>
-      </h4>
+      <h1 className="text-4xl font-bold text-center ">Test Case Report</h1>
+      <p className="text-sm font-bold mb-6 text-center text-gray-700">
+        User ID: <span className="text-gray-700">{userId}</span> and APK ID: <span className="text-gray-700">{apkId}</span>
+      </p>
 
 
       {testCases.map((testCase, index) => (
@@ -95,8 +95,8 @@ const ReportForm = () => {
           </CardHeader>
           <CardContent>
             <div className="mb-4">
-              <p className="text-lg font-medium">Verdict: 
-                <Badge className={`ml-2 ${testCase.verdict === "Passed" ? "bg-green-500" : "bg-red-500"}`}> 
+              <p className="text-lg font-medium">Verdict:
+                <Badge className={`ml-2 ${testCase.verdict === "Passed" ? "bg-green-500" : "bg-red-500"}`}>
                   {testCase.verdict}
                 </Badge>
               </p>
