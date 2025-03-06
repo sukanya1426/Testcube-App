@@ -4,7 +4,7 @@ import { useAuth } from "@/context/auth-context";
 
 export function Header() {
 
-	const { user } = useAuth();
+	const { user, logout } = useAuth();
 
 	return (
 		<header className="bg-gray-900 text-white shadow-md">
@@ -35,11 +35,14 @@ export function Header() {
 						<Link to="/profile" className="block px-4 py-2 hover:bg-gray-200">
 							Profile
 						</Link>
-						<Link to="/login" className="block px-4 py-2 hover:bg-gray-200">
-							<button className="block w-full text-left px-4 py-2 hover:bg-gray-200">
-								Logout
-							</button>
-						</Link>
+						<button
+							onClick={() => {
+								logout();
+							}}
+							className="block w-full text-left px-4 py-2 hover:bg-gray-200"
+						>
+							Logout
+						</button>
 					</div>
 				</div>
 			</div>

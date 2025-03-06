@@ -6,8 +6,7 @@ import DashboardPage from "./pages/DashboardPage";
 import OtpPage from "./pages/OtpPage";
 import ProtectedRoute from "./components/protectedRoute";
 import { AuthProvider } from "./context/auth-context";
-
-
+import { Toaster } from "sonner"; 
 
 export default function App() {
   return (
@@ -25,6 +24,7 @@ export default function App() {
           </Route>
         </Routes>
       </Router>
+      <Toaster richColors position="bottom-right" duration={3000} /> 
     </AuthProvider>
   );
 }

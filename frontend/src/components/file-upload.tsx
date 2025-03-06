@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "@/context/auth-context";
+import { toast } from "sonner";
 
-export  function FileUplaoad() {
+export function FileUplaoad() {
   const [apkFile, setApkFile] = useState<File | null>(null);
   const [txtFile, setTxtFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<{ message: string; success: boolean } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const {user} = useAuth();
+  const { user } = useAuth();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, type: "apk" | "txt") => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const fileName = file.name.toLowerCase();
-      
+
       if (type === "apk" && fileName.endsWith(".apk")) {
         setApkFile(file);
       } else if (type === "txt" && fileName.endsWith(".txt")) {
@@ -27,7 +28,7 @@ export  function FileUplaoad() {
 
   const handleSubmit = async () => {
     if (!apkFile || !txtFile) {
-      setUploadStatus({ message: "Please upload both APK and TXT files.", success: false });
+      toast.error("Please upload both APK and TXT files.");
       return;
     }
 
@@ -45,13 +46,15 @@ export  function FileUplaoad() {
           "email": user?.email || "base",
         },
       });
-      if (response.status != 200) throw new Error(await response.data.message || "File upload failed.");
+      if (response.status !== 200) throw new Error(await response.data.message || "File upload failed.");
 
       setUploadStatus({ message: response.data.message, success: true });
       setApkFile(null);
       setTxtFile(null);
+      toast.success(response.data.message);
     } catch (error) {
       setUploadStatus({ message: error instanceof Error ? error.message : "Upload failed.", success: false });
+      toast.error(error instanceof Error ? error.message : "Upload failed.");
     } finally {
       setIsUploading(false);
     }

@@ -11,6 +11,7 @@ router.post('/verify-email', UserController.verifyEmail);
 router.post('/login', UserController.login);
 router.post("/upload", UserController.uploadFiles);
 router.post("/refresh", UserController.getNewAccessToken);
+router.post("/logout", UserController.logout);
 
 
 

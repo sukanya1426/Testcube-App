@@ -2,12 +2,13 @@ import { useAuth } from "@/context/auth-context";
 import { parseFileName } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
 
 interface FileData {
   totalApks: number;
   pending: number;
   completed: number;
-  apks: [{id: string, name: string}];
+  apks: [{ id: string; name: string }];
 }
 
 export function Dashboard() {
@@ -25,8 +26,10 @@ export function Dashboard() {
           });
           const data = await response.json();
           setFileData(data.data);
+          toast.success("Files fetched successfully!");
         } catch (error) {
           console.error("Error fetching files:", error);
+          toast.error("Failed to fetch files.");
         } finally {
           setLoading(false);
         }
@@ -36,7 +39,7 @@ export function Dashboard() {
     }
   }, [user]);
 
-  const handleSeeReport = async (apkId: String) => {
+  const handleSeeReport = async (apkId: string) => {
     try {
       console.log(apkId, user?.id);
       const response = await fetch(`http://localhost:3000/user/report`, {
@@ -47,10 +50,12 @@ export function Dashboard() {
       });
       const data = await response.json();
       console.log(data);
+      toast.success("Report fetched successfully!");
     } catch (error) {
       console.error("Error fetching report:", error);
+      toast.error("Failed to fetch report.");
     }
-  }
+  };
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
@@ -84,7 +89,7 @@ export function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {fileData.apks.map((apk , index) => (
+              {fileData.apks.map((apk, index) => (
                 <tr key={index} className="text-center border">
                   <td className="p-2 border">
                     <div className="flex justify-center gap-20 items-center">

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const OTPVerification = () => {
   const [otp, setOtp] = useState(Array(6).fill("")); // OTP State
@@ -14,30 +15,30 @@ const OTPVerification = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const value = e.target.value;
 
-    if (!/^\d?$/.test(value)) return; // Allow only single digit numbers
+    if (!/^\d?$/.test(value)) return; 
 
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
 
-    // Auto-focus next input if available
+    
     if (value && index < otp.length - 1) {
       document.getElementById(`otp-input-${index + 1}`)?.focus();
     }
   };
 
-  // Handle Backspace to focus previous input
+  
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       document.getElementById(`otp-input-${index - 1}`)?.focus();
     }
   };
 
-  // Handle form submission
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    console.log(location.state.email,otp.join(""));
+    console.log(location.state.email, otp.join(""));
 
     try {
       const response = await fetch("http://localhost:3000/user/verify-email", {
@@ -67,12 +68,21 @@ const OTPVerification = () => {
     alert("OTP has been resent!");
   };
 
+  // Effect to handle error toast
+  useEffect(() => {
+    if (error) {
+      toast.error("Verification failed", {
+        description: error,
+      });
+    }
+  }, [error]);
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
         <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">OTP Verification</h2>
         <p className="text-center text-gray-500 mb-4">Enter the 6-digit OTP sent to your email</p>
-        {error && <p className="text-red-500 text-center mb-2">{error}</p>}
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex justify-between mb-6">
             {otp.map((_, index) => (

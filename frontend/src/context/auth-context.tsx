@@ -44,7 +44,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log(data);
   }
 
-  const logout = () => {
+  const logout = async () => {
+    const response = await fetch("http://localhost:3000/user/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+    
+    if (!response.ok) throw new Error("Logout failed");
+    else console.log("Logout successful");
     setIsAuthenticated(false);
     setUser(undefined);
     localStorage.removeItem("is_authenticated_to_testcube");

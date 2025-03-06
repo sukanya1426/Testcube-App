@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 export function RegisterForm({
   className,
@@ -45,6 +46,15 @@ export function RegisterForm({
       }
     }
   };
+
+  // Trigger toast error when error state changes
+  useEffect(() => {
+    if (error) {
+      toast.error("Registration failed", {
+        description: error,
+      });
+    }
+  }, [error]); // Run only when the error state changes
 
   return (
     <div className={`flex flex-col gap-6 ${className}`} {...props}>
@@ -89,11 +99,9 @@ export function RegisterForm({
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+             
               <Button type="submit" className="w-full">
-                
-                  Sign Up
-               
+                Sign Up
               </Button>
               <div className="mt-4 text-center text-sm">
                 Already have an account?{" "}

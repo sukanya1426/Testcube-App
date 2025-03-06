@@ -2,6 +2,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -16,23 +17,34 @@ import { useAuth } from "@/context/auth-context";
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false); // For password visibility toggle
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const loginUser = async (event: React.FormEvent) => {
     event.preventDefault();
-    setError(null);
+
+    if (!email || !password) {
+      toast.error("Please fill in both email and password");
+      return;
+    }
 
     try {
       const data = await login(email, password);
       console.log("User logged in successfully:", data);
+      toast.success("Login successful", {
+        description: "Redirecting to dashboard...",
+      });
       navigate("/");
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message);
+        toast.error("Login failed", {
+          description: err.message,
+        });
       } else {
-        setError("An unknown error occurred.");
+        toast.error("Login failed", {
+          description: "An unknown error occurred.",
+        });
       }
     }
   };
@@ -58,31 +70,38 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  autoFocus
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
+                <div className="flex items-center justify-between">
                   <Label htmlFor="password">Password</Label>
                   <a
                     href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                    className="inline-block text-sm underline-offset-4 hover:underline"
                   >
                     Forgot your password?
                   </a>
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-2 top-2 text-sm"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
               </div>
-              {error && <p className="text-red-500 text-sm">{error}</p>}
               <Button type="submit" className="w-full">
-
                 Login
-
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

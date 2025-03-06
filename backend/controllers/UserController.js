@@ -12,6 +12,7 @@ import io from 'socket.io-client'
 import refreshAccessToken from '../utils/RefreshAccessToken.js';
 import verifyRefreshToken from '../utils/VerifyRefreshToken.js';
 import TestCaseModel from '../models/TestCase.js'
+import RefreshTokenModel from '../models/RefreshToken.js';
 
 
 class UserController {
@@ -194,6 +195,30 @@ class UserController {
             })
         }
     }
+
+    static logout = async (req, res) => {
+        try {
+
+            const refreshToken = req.cookies.refreshToken;
+            await RefreshTokenModel.findOneAndUpdate(
+              { token: refreshToken },
+            );
+            
+            res.clearCookie('accessToken');    
+            res.clearCookie('refreshToken');   
+            res.clearCookie('is_authenticated'); 
+    
+            return res.status(200).json({
+                message: "Logout successful."
+            });
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: "Internal server error. Please try again."
+            });
+        }
+    }
+    
 
     static parseEmail = (email) => {
         const prefix = email.split('@')[0];

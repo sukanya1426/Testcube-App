@@ -30,7 +30,7 @@ let currentlyRunning = false;
 
 const startDroidbot = () => {
     console.log("Starting droidbot...")
-    const process = spawn("bash", ["-c", "cd && droidbot -a /home/saimon/Downloads/test.apk -o output_dir"]);
+    const process = spawn("bash", ["-c", "cd && droidbot -a /home/mahdiya/Downloads/test.apk -o output_dir -is_emulator"]);
 
     process.stdout.on("data", (data) => {
         // console.log(`stdout: ${data}`);
