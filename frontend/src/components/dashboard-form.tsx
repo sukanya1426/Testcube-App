@@ -3,6 +3,7 @@ import { parseFileName } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
+import { Link, useNavigate } from "react-router-dom";
 
 interface FileData {
   totalApks: number;
@@ -94,7 +95,11 @@ export function Dashboard() {
                   <td className="p-2 border">
                     <div className="flex justify-center gap-20 items-center">
                       <p>{parseFileName(apk.name)}</p>
-                      <Button onClick={() => handleSeeReport(apk.id)}>See Report</Button>
+                      <Button onClick={() => handleSeeReport(apk.id)}>
+                        <Link to="/report" className="underline underline-offset-4">
+                        See Report
+                        </Link>
+                        See Report</Button>
                     </div>
                   </td>
                 </tr>
