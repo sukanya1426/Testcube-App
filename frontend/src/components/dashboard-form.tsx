@@ -17,6 +17,7 @@ export function Dashboard() {
   const [fileData, setFileData] = useState<FileData | null>(null);
   const { user } = useAuth();
   const [showReport, setShowReport] = useState(false);
+  //const [showGraph, setShowGraph] = useState(false);
   const [testCases, setTestCases] = useState<TestCase[]>([]);
 
   useEffect(() => {
@@ -60,7 +61,7 @@ export function Dashboard() {
           field: input.field,
           text: input.text,
         })),
-      }))
+      }));
       setTestCases(dummy);
       toast.success("Report fetched successfully!");
       setShowReport(true);
@@ -70,6 +71,13 @@ export function Dashboard() {
     }
   };
 
+  const handleSeeGraph = () => {
+    window.open("http://localhost:3000/user/graph/index.html", "_blank");
+  };
+  const handleSeeLog = () => {
+    window.open("http://localhost:3000/user/log/logcat.txt", "_blank");
+  };
+  
   return (
     <div className="h-full w-screen p-5 bg-white rounded-lg shadow-md">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -82,9 +90,7 @@ export function Dashboard() {
           <p className="text-2xl font-bold text-yellow-500">{fileData?.pending || 0}</p>
         </div>
         <div className="p-5 bg-white shadow-lg rounded-lg text-center">
-          <h2 className="text-lg font-semibold text-gray-700">
-            Completed Tests
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-700">Completed Tests</h2>
           <p className="text-2xl font-bold text-green-500">{fileData?.completed || 0}</p>
         </div>
       </div>
@@ -96,29 +102,30 @@ export function Dashboard() {
       ) : (
         <div className="overflow-x-auto">
           {showReport ? (
-            <ReportForm testCases={testCases} onClose={() => {setShowReport(false)}}/>
-          ): (
+            <ReportForm testCases={testCases} onClose={() => { setShowReport(false); }} />
+          ) : (
             <table className="w-full border border-gray-200">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="p-2 border">APK Files</th>
-              </tr>
-            </thead>
-            <tbody>
-              {fileData.apks.map((apk, index) => (
-                <tr key={index} className="text-center border">
-                  <td className="p-2 border">
-                    <div className="flex justify-center gap-20 items-center">
-                      <p>{parseFileName(apk.name)}</p>
-                      <Button onClick={() => handleSeeReport(apk.id)}>
-                        See Report
-                      </Button>
-                    </div>
-                  </td>
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="p-2 border">APK Files</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {fileData.apks.map((apk, index) => (
+                  <tr key={index} className="text-center border">
+                    <td className="p-2 border">
+                      <div className="flex justify-center gap-10 items-center">
+                        <p>{parseFileName(apk.name)}</p>
+                        <Button onClick={() => handleSeeReport(apk.id)}>See Report</Button>
+                        <Button onClick={handleSeeGraph}>See Graph</Button>
+                        <Button onClick={handleSeeLog}>See Log</Button>
+
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
       )}

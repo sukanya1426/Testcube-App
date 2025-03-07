@@ -13,6 +13,9 @@ import refreshAccessToken from '../utils/RefreshAccessToken.js';
 import verifyRefreshToken from '../utils/VerifyRefreshToken.js';
 import TestCaseModel from '../models/TestCase.js'
 import RefreshTokenModel from '../models/RefreshToken.js';
+import path from 'path';
+import express from 'express';
+
 
 
 class UserController {
@@ -381,8 +384,22 @@ class UserController {
             })
         }
     }
+    static getGraph = async (req, res) => {
+        try{
+            const outputDirPath = path.resolve('/home/mahdiya/TestCube/output_dir');
+            return express.static(outputDirPath);
+        }
+        catch (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: "Internal server error. Please try again."
+            })
+        }
+    }
+   
 
 }
+
 
 
 export default UserController; 
