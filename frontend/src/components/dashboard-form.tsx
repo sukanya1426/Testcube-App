@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import ReportForm, { TestCase } from "./report-form";
+import numberToWords from "number-to-words";
+import { parseEmail } from "@/lib/utils";
 
 interface FileData {
   totalApks: number;
   pending: number;
   completed: number;
-  apks: [{ id: string; name: string }];
+  apks: [{ id: string; name: string, link: string, version: number }];
 }
 
 export function Dashboard() {
@@ -70,11 +72,11 @@ export function Dashboard() {
     }
   };
 
-  const handleSeeGraph = () => {
-    window.open("http://localhost:3000/graph/index.html", "_blank");
+  const handleSeeGraph = (version: number) => {
+    window.open(`http://localhost:3000/graph/${parseEmail(user?.email || "")}/apk/${numberToWords.toWords(version)}/output/index.html`, "_blank");
   };
-  const handleSeeLog = () => {
-    window.open("http://localhost:3000/log/logcat.txt", "_blank");
+  const handleSeeLog = (version: number) => {
+    window.open(`http://localhost:3000/log/${parseEmail(user?.email || "")}/apk/${numberToWords.toWords(version)}/output/logcat.txt`, "_blank");
   };
   
   return (
@@ -116,8 +118,8 @@ export function Dashboard() {
                       <div className="flex justify-center gap-10 items-center">
                         <p>{apk.name.substring(1)}</p>
                         <Button onClick={() => handleSeeReport(apk.id)}>See Report</Button>
-                        <Button onClick={handleSeeGraph}>See Graph</Button>
-                        <Button onClick={handleSeeLog}>See Log</Button>
+                        <Button onClick={() => handleSeeGraph(apk.version)}>See Graph</Button>
+                        <Button onClick={() => handleSeeLog(apk.version)}>See Log</Button>
                       </div>
                     </td>
                   </tr>

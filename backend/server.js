@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 
-const outputPath = path.resolve('/home/saimon/output_dir');
+const outputPath = path.resolve('/home/saimon/Documents/Testcube-App/backend/uploads');
 
 app.use("/graph", express.static(outputPath));
 app.use("/log", express.static(outputPath));

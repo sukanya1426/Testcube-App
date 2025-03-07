@@ -8,7 +8,9 @@ import ApkModel from "../backend/models/Apk.js"
 import RunningModel from '../backend/models/Running.js';
 import TestCaseModel from '../backend/models/TestCase.js';
 import InputModel from '../backend/models/Input.js';
-import fs from 'fs';
+import fs from 'fs-extra';
+import path from 'path';
+
 
 const app = express();
 
@@ -74,12 +76,15 @@ const startDroidbot = async (apkId, userId) => {
     });
 };
 
-const stopDroidbot = () => {
+const stopDroidbot = (apkLink) => {
     if (droidbotProcess) {
         console.log("Stopping droidbot...");
         droidbotProcess.kill("SIGTERM");
         droidbotProcess = null;
         currentlyRunning = false;
+        const folderPath = path.dirname(apkLink);
+        const sourceDir = "/home/saimon/output_dir";
+        fs.moveSync(sourceDir, path.join(folderPath, "output"), { overwrite: true });
         processQueue();
     } else {
         console.log("No droidbot process running.");
@@ -96,13 +101,13 @@ io.on('connection', (socket) => {
     socket.on("restart", async (data) => {
         console.log("Restarting droidbot...", data.data);
         if (data.data > 0) {
-            stopDroidbot();
             currentlyRunning = false;
             const runnings = await RunningModel.find().sort({ createdAt: -1 }).limit(1);
             const running = await runnings[0] || null;
             if (!running) return;
             await InputModel.deleteMany({ userId: running.userId, apkId: running.apkId });
             const apk = await ApkModel.findOne({ userId: running.userId, _id: running.apkId });
+            stopDroidbot(apk.apkLink);
             apk.isFinished = true;
             await apk.save();
             await RunningModel.deleteOne({ userId: running.userId, apkId: running.apkId });

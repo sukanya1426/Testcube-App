@@ -385,6 +385,8 @@ class UserController {
                     return {
                         id: apk._id,
                         name: apk.name,
+                        link: apk.apkLink,
+                        version: apk.version,
                     }
                 })
             };
