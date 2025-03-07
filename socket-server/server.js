@@ -28,22 +28,36 @@ let currentlyRunning = false;
 
 
 
+let droidbotProcess = null;
+
 const startDroidbot = () => {
-    console.log("Starting droidbot...")
-    const process = spawn("bash", ["-c", "cd && droidbot -a /home/mahdiya/Downloads/test.apk -o output_dir"]);
+    console.log("Starting droidbot...");
 
-    process.stdout.on("data", (data) => {
-        // console.log(`stdout: ${data}`);
+    droidbotProcess = spawn("bash", ["-c", "cd && droidbot -a /home/saimon/Downloads/test.apk -o output_dir -is_emulator"]);
+
+    droidbotProcess.stdout.on("data", (data) => {
+        console.log(`stdout: ${data}`);
     });
 
-    process.stderr.on("data", (data) => {
-        // console.error(`stderr: ${data}`);
+    droidbotProcess.stderr.on("data", (data) => {
+        console.error(`stderr: ${data}`);
     });
 
-    process.on("close", (code) => {
-        console.log(`Process exited with code ${code}`);
+    droidbotProcess.on("close", (code) => {
+        console.log(`Droidbot process exited with code ${code}`);
+        droidbotProcess = null;
     });
-}
+};
+
+const stopDroidbot = () => {
+    if (droidbotProcess) {
+        console.log("Stopping droidbot...");
+        spawn("pkill", ["-f", "droidbot"]);
+        droidbotProcess = null;
+    } else {
+        console.log("No droidbot process running.");
+    }
+};
 
 
 
@@ -51,6 +65,14 @@ const startDroidbot = () => {
 
 io.on('connection', (socket) => {
     // console.log('A user connected');
+
+    socket.on("restart", (data) => {
+        console.log("Restarting droidbot...", data.data);
+        if (data.data > 10){
+            stopDroidbot();
+            currentlyRunning = false;
+        }
+    })
 
     socket.on("input", async (data) => {
         console.log(data.data);
