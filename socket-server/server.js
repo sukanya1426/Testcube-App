@@ -66,43 +66,59 @@ const stopDroidbot = () => {
 io.on('connection', (socket) => {
     // console.log('A user connected');
 
-    socket.on("restart", (data) => {
+    socket.on("restart", async (data) => {
         console.log("Restarting droidbot...", data.data);
-        if (data.data > 10){
+        if (data.data > 0) {
             stopDroidbot();
             currentlyRunning = false;
+            const runnings = await RunningModel.find().sort({ createdAt: -1 }).limit(1);
+            const running = await runnings[0] || null;
+            if (!running) return;
+            await InputModel.deleteMany({ userId: running.userId, apkId: running.apkId });
+            const apk = await ApkModel.findOne({ userId: running.userId, _id: running.apkId });
+            apk.isFinished = true;
+            await apk.save();
+            await RunningModel.deleteOne({ userId: running.userId, apkId: running.apkId });
         }
     })
 
     socket.on("input", async (data) => {
         console.log(data.data);
-        const running = await RunningModel.findOne();
-        if(!running) return;
-        const input = await InputModel.find({userId: running.userId, apkId: running.apkId, field: data.data.field, text: data.data.text});
-        if(input.length > 0) return;
-        const newInput = new InputModel({userId: running.userId, apkId: running.apkId, field: data.data.field, text: data.data.text});
-        await newInput.save();
+        try {
+            const runnings = await RunningModel.find().sort({ createdAt: -1 }).limit(1);
+            const running = await runnings[0] || null;
+            if (!running) return;
+            const input = await InputModel.find({ userId: running.userId, apkId: running.apkId, field: data.data.field, text: data.data.text });
+            console.log(input);
+            if (input.length > 0) return;
+            const newInput = new InputModel({ userId: running.userId, apkId: running.apkId, field: data.data.field, text: data.data.text });
+            await newInput.save();
+        } catch (error) {
+            console.trace(error);
+        }
     })
 
     socket.on('test_case', async (data) => {
         console.log(data.data);
-        const running = await RunningModel.findOne();
-        if(!running) return;
-        const inputs = await InputModel.find({userId: running.userId, apkId: running.apkId});
+        const runnings = await RunningModel.find().sort({ createdAt: -1 }).limit(1);
+        const running = await runnings[0] || null;
+        if (!running) return;
+        const inputs = await InputModel.find({ userId: running.userId, apkId: running.apkId });
         console.log(inputs);
-        const testCase = new TestCaseModel({userId: running.userId, apkId: running.apkId, verdict: data.data.verdict, response: data.data.response, inputs: inputs.map(input => input.toObject())});
+        const testCase = new TestCaseModel({ userId: running.userId, apkId: running.apkId, verdict: data.data.verdict, response: data.data.response, inputs: inputs.map(input => input.toObject()) });
         await testCase.save();
         inputs.forEach(async (element) => {
-            await InputModel.deleteOne({_id: element._id});
+            await InputModel.deleteOne({ _id: element._id });
         });
     });
 
     socket.on('package', async (data) => {
         console.log(data.data);
-        const running = await RunningModel.findOne();
-        if(!running) return;
-        const apk = await ApkModel.findOne({userId: running.userId, _id: running.apkId});
-        if(!apk) return;
+        const runnings = await RunningModel.find().sort({ createdAt: -1 }).limit(1);
+        const running = await runnings[0] || null;
+        if (!running) return;
+        const apk = await ApkModel.findOne({ userId: running.userId, _id: running.apkId });
+        if (!apk) return;
         apk.packageName = data.data.package_name;
         await apk.save();
     });
@@ -110,11 +126,11 @@ io.on('connection', (socket) => {
     socket.on("start_droidbot", async (data) => {
         console.log(data);
         if (!currentlyRunning) {
-            await new RunningModel({userId: data.userId, apkId: data.apkId}).save();
+            await new RunningModel({ userId: data.userId, apkId: data.apkId }).save();
             currentlyRunning = true;
             // socket.disconnect();
             startDroidbot();
-        }else {
+        } else {
             console.log("Droidbot is already running");
         }
     });

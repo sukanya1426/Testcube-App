@@ -41,7 +41,7 @@ export function Dashboard() {
 
       fetchFiles();
     }
-  }, [user]);
+  }, [user, fileData]);
 
   const handleSeeReport = async (apkId: string) => {
     try {

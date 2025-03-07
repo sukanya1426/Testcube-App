@@ -6,7 +6,8 @@ const testCaseSchema = mongoose.Schema({
     apkId: {type: String, required: true},
     verdict: {type: String, required: true},
     response: {type: String, required: true},
-    inputs: [inputSchema]
+    inputs: [inputSchema],
+    createdAt: {type: Date, required: true, default: Date.now},
 });
 
 const TestCaseModel = mongoose.model("TestCase", testCaseSchema);

@@ -7,6 +7,7 @@ const ApkSchema = new mongoose.Schema({
     apkLink: {type: String, required: true},
     packageName: {type: String, required: false},
     isFinished: {type: Boolean, required: true, default: false},
+    createdAt: {type: Date, required: true, default: Date.now},
 });
 
 const ApkModel = mongoose.model("Apk", ApkSchema);
