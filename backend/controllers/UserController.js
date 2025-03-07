@@ -318,12 +318,14 @@ class UserController {
             }
 
             const apkLink = `/home/saimon/Documents/Testcube-App/backend/uploads/${this.parseEmail(email)}/apk/${numberToWords.toWords(version)}/${apkName}`;
+            const txtLink = `/home/saimon/Documents/Testcube-App/backend/uploads/${this.parseEmail(email)}/txt/${numberToWords.toWords(version)}/${txtName}`;
 
             const apk = await new ApkModel({
                 name: apkName,
                 userId: user._id,
                 version,
                 apkLink,
+                txtLink
             });
 
             await apk.save();

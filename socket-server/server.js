@@ -8,6 +8,7 @@ import ApkModel from "../backend/models/Apk.js"
 import RunningModel from '../backend/models/Running.js';
 import TestCaseModel from '../backend/models/TestCase.js';
 import InputModel from '../backend/models/Input.js';
+import fs from 'fs';
 
 const app = express();
 
@@ -53,6 +54,9 @@ const startDroidbot = async (apkId, userId) => {
     }
 
     await new RunningModel({ apkId, userId }).save();
+
+    if (fs.existsSync("/home/saimon/TestCube/droidbot/credential.txt")) fs.unlinkSync("/home/saimon/TestCube/droidbot/credential.txt");
+    fs.copyFileSync(apk.txtLink, "/home/saimon/TestCube/droidbot/credential.txt");
 
     droidbotProcess = spawn("bash", ["-c", `cd && droidbot -a ${apk.apkLink} -o output_dir -is_emulator`]);
 
@@ -148,14 +152,6 @@ io.on('connection', (socket) => {
 
     socket.on("start_droidbot", async (data) => {
         console.log(data);
-        // if (!currentlyRunning) {
-        //     await new RunningModel({ userId: data.userId, apkId: data.apkId }).save();
-        //     currentlyRunning = true;
-        //     // socket.disconnect();
-        //     startDroidbot();
-        // } else {
-        //     console.log("Droidbot is already running");
-        // }
         console.log("Received start_droidbot event");
         apkQueue.push({ apkId: data.apkId, userId: data.userId });
         processQueue();
