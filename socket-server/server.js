@@ -24,16 +24,37 @@ const server = createServer(app);
 const io = new Server(server);
 connectDb("mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.9")
 
+
+
 let currentlyRunning = false;
-
-
-
 let droidbotProcess = null;
+let apkQueue = [];
 
-const startDroidbot = () => {
-    console.log("Starting droidbot...");
+const processQueue = async () => {
+    if (currentlyRunning || apkQueue.length === 0) return;
 
-    droidbotProcess = spawn("bash", ["-c", "cd && droidbot -a /home/saimon/Downloads/test.apk -o output_dir -is_emulator"]);
+    const { apkId, userId } = apkQueue.shift();
+    startDroidbot(apkId, userId);
+};
+
+
+
+
+const startDroidbot = async (apkId, userId) => {
+    console.log("Starting droidbot for: ", apkId, userId);
+    currentlyRunning = true;
+
+    const apk = await ApkModel.findOne({_id: apkId, userId});
+    if (!apk) {
+        console.log("APK not found");
+        currentlyRunning = false;
+        processQueue();
+        return;
+    }
+
+    await new RunningModel({ apkId, userId }).save();
+
+    droidbotProcess = spawn("bash", ["-c", `cd && droidbot -a ${apk.apkLink} -o output_dir -is_emulator`]);
 
     droidbotProcess.stdout.on("data", (data) => {
         console.log(`stdout: ${data}`);
@@ -52,8 +73,10 @@ const startDroidbot = () => {
 const stopDroidbot = () => {
     if (droidbotProcess) {
         console.log("Stopping droidbot...");
-        spawn("pkill", ["-f", "droidbot"]);
+        droidbotProcess.kill("SIGTERM");
         droidbotProcess = null;
+        currentlyRunning = false;
+        processQueue();
     } else {
         console.log("No droidbot process running.");
     }
@@ -125,14 +148,17 @@ io.on('connection', (socket) => {
 
     socket.on("start_droidbot", async (data) => {
         console.log(data);
-        if (!currentlyRunning) {
-            await new RunningModel({ userId: data.userId, apkId: data.apkId }).save();
-            currentlyRunning = true;
-            // socket.disconnect();
-            startDroidbot();
-        } else {
-            console.log("Droidbot is already running");
-        }
+        // if (!currentlyRunning) {
+        //     await new RunningModel({ userId: data.userId, apkId: data.apkId }).save();
+        //     currentlyRunning = true;
+        //     // socket.disconnect();
+        //     startDroidbot();
+        // } else {
+        //     console.log("Droidbot is already running");
+        // }
+        console.log("Received start_droidbot event");
+        apkQueue.push({ apkId: data.apkId, userId: data.userId });
+        processQueue();
     });
 
     socket.on('disconnect', () => {

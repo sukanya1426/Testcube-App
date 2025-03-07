@@ -21,8 +21,9 @@ export function FileUplaoad() {
         setTxtFile(file);
       } else {
         alert(`Please select a valid ${type.toUpperCase()} file.`);
-        event.target.value = "";
+        toast.error(`Please select a valid ${type.toUpperCase()} file.`);
       }
+      event.target.value = "";
     }
   };
 

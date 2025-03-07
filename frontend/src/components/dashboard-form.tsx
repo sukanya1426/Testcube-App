@@ -1,5 +1,4 @@
 import { useAuth } from "@/context/auth-context";
-import { parseFileName } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
@@ -41,7 +40,7 @@ export function Dashboard() {
 
       fetchFiles();
     }
-  }, [user, fileData]);
+  }, [user]);
 
   const handleSeeReport = async (apkId: string) => {
     try {
@@ -115,7 +114,7 @@ export function Dashboard() {
                   <tr key={index} className="text-center border">
                     <td className="p-2 border">
                       <div className="flex justify-center gap-10 items-center">
-                        <p>{parseFileName(apk.name)}</p>
+                        <p>{apk.name.substring(1)}</p>
                         <Button onClick={() => handleSeeReport(apk.id)}>See Report</Button>
                         <Button onClick={handleSeeGraph}>See Graph</Button>
                         <Button onClick={handleSeeLog}>See Log</Button>

@@ -13,6 +13,7 @@ import refreshAccessToken from '../utils/RefreshAccessToken.js';
 import verifyRefreshToken from '../utils/VerifyRefreshToken.js';
 import TestCaseModel from '../models/TestCase.js'
 import RefreshTokenModel from '../models/RefreshToken.js';
+import numberToWords from 'number-to-words';
 
 
 
@@ -202,13 +203,13 @@ class UserController {
 
             const refreshToken = req.cookies.refreshToken;
             await RefreshTokenModel.findOneAndUpdate(
-              { token: refreshToken },
+                { token: refreshToken },
             );
-            
-            res.clearCookie('accessToken');    
-            res.clearCookie('refreshToken');   
-            res.clearCookie('is_authenticated'); 
-    
+
+            res.clearCookie('accessToken');
+            res.clearCookie('refreshToken');
+            res.clearCookie('is_authenticated');
+
             return res.status(200).json({
                 message: "Logout successful."
             });
@@ -219,7 +220,7 @@ class UserController {
             });
         }
     }
-    
+
 
     static parseEmail = (email) => {
         const prefix = email.split('@')[0];
@@ -229,23 +230,44 @@ class UserController {
     static storage = multer.diskStorage({
         destination: (req, file, cb) => {
             const subFolder = this.parseEmail(req.headers.email);
-            cb(null, "uploads/" + subFolder);
-        },
-        filename: (req, file, cb) => {
-            const prefix = this.parseEmail(req.headers.email);
-            let fileName = `1${prefix}-${file.originalname}`;
-
-            if (!fs.existsSync("uploads/" + prefix)) {
-                fs.mkdirSync("uploads/" + prefix);
-            }
-
             let version = 1;
 
-            while (fs.existsSync(`uploads/${prefix}/${fileName}`)) {
+            // Determine whether the file is APK or TXT
+            const fileTypeFolder = file.mimetype.startsWith('application/vnd.android.package-archive') ? 'apk' : 'txt';
+
+            // Check if the version folder exists
+            while (fs.existsSync(`uploads/${subFolder}/${fileTypeFolder}/${numberToWords.toWords(version)}`)) {
                 version++;
-                fileName = `${version}${prefix}-${file.originalname}`;
             }
 
+            // Construct the directory path based on the file type and version
+            const versionFolder = numberToWords.toWords(version); // Folder like "one", "two"
+            const fullPath = `uploads/${subFolder}/${fileTypeFolder}/${versionFolder}`;
+
+            // Ensure directories exist
+            if (!fs.existsSync("uploads")) fs.mkdirSync("uploads");
+            if (!fs.existsSync(`uploads/${subFolder}`)) fs.mkdirSync(`uploads/${subFolder}`);
+            if (!fs.existsSync(`uploads/${subFolder}/${fileTypeFolder}`)) fs.mkdirSync(`uploads/${subFolder}/${fileTypeFolder}`);
+            if (!fs.existsSync(fullPath)) fs.mkdirSync(fullPath);
+
+            // Proceed to store the file in `fullPath`
+            cb(null, fullPath);
+        },
+
+        filename: (req, file, cb) => {
+            const subFolder = this.parseEmail(req.headers.email);
+            let version = 1;
+
+            // Determine whether the file is APK or TXT
+            const fileTypeFolder = file.mimetype.startsWith('application/vnd.android.package-archive') ? 'apk' : 'txt';
+
+            // Handle versioning logic
+            while (fs.existsSync(`uploads/${subFolder}/${fileTypeFolder}/${numberToWords.toWords(version)}`)) {
+                version++;
+            }
+            version--;
+
+            const fileName = `${version}${file.originalname}`;
             if (file.originalname.endsWith(".apk")) {
                 req.apkName = fileName;
             } else {
@@ -253,8 +275,12 @@ class UserController {
             }
             req.version = version;
             cb(null, fileName);
-        },
+
+            // Return the filename for storage
+            cb(null, fileName);
+        }
     });
+
 
     static upload = multer({ storage: this.storage }).fields([
         { name: "apkFile", maxCount: 1 },
@@ -291,7 +317,7 @@ class UserController {
                 return res.status(404).json({ message: "User not found." });
             }
 
-            const apkLink = `uploads/${this.parseEmail(email)}/${apkName}`;
+            const apkLink = `/home/saimon/Documents/Testcube-App/backend/uploads/${this.parseEmail(email)}/apk/${numberToWords.toWords(version)}/${apkName}`;
 
             const apk = await new ApkModel({
                 name: apkName,
