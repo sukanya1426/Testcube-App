@@ -72,10 +72,10 @@ export function Dashboard() {
   };
 
   const handleSeeGraph = () => {
-    window.open("http://localhost:3000/user/graph/index.html", "_blank");
+    window.open("http://localhost:3000/graph/index.html", "_blank");
   };
   const handleSeeLog = () => {
-    window.open("http://localhost:3000/user/log/logcat.txt", "_blank");
+    window.open("http://localhost:3000/log/logcat.txt", "_blank");
   };
   
   return (
@@ -119,7 +119,6 @@ export function Dashboard() {
                         <Button onClick={() => handleSeeReport(apk.id)}>See Report</Button>
                         <Button onClick={handleSeeGraph}>See Graph</Button>
                         <Button onClick={handleSeeLog}>See Log</Button>
-
                       </div>
                     </td>
                   </tr>

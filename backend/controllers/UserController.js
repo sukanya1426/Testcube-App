@@ -384,20 +384,6 @@ class UserController {
             })
         }
     }
-    static getGraph = async (req, res) => {
-        try{
-            const outputDirPath = path.resolve('/home/mahdiya/TestCube/output_dir');
-            return express.static(outputDirPath);
-        }
-        catch (err) {
-            console.log(err);
-            return res.status(500).json({
-                message: "Internal server error. Please try again."
-            })
-        }
-    }
-   
-
 }
 
 

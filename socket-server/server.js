@@ -8,7 +8,6 @@ import ApkModel from "../backend/models/Apk.js"
 import RunningModel from '../backend/models/Running.js';
 import TestCaseModel from '../backend/models/TestCase.js';
 import InputModel from '../backend/models/Input.js';
-import path from 'path';
 
 const app = express();
 

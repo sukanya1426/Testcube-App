@@ -7,6 +7,9 @@ import userRoute from './routes/UserRoute.js';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import './config/passport-jwt-strategy.js';
+import path from 'path';
+
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DATABASE_URL = process.env.DATABASE_URL || '';
@@ -22,6 +25,11 @@ connectDb(DATABASE_URL);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
+
+const outputPath = path.resolve('/home/saimon/output_dir');
+
+app.use("/graph", express.static(outputPath));
+app.use("/log", express.static(outputPath));
 
 app.use('/user', userRoute);
 
