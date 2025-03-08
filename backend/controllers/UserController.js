@@ -111,8 +111,8 @@ class UserController {
                 return res.status(404).json({ message: "User not found." });
             }
 
-            const apkLink = `/home/mahdiya/testcube-app/backend/uploads/${parseEmail(email)}/apk/${numberToWords.toWords(version)}/${apkName}`;
-            const txtLink = `/home/mahdiya/testcube-app/backend/uploads/${parseEmail(email)}/txt/${numberToWords.toWords(version)}/${txtName}`;
+            const apkLink = `/home/saimon/Documents/Testcube-App/backend/uploads/${parseEmail(email)}/apk/${numberToWords.toWords(version)}/${apkName}`;
+            const txtLink = `/home/saimon/Documents/Testcube-App/backend/uploads/${parseEmail(email)}/txt/${numberToWords.toWords(version)}/${txtName}`;
 
             const apk = await new ApkModel({
                 name: apkName,
@@ -181,6 +181,7 @@ class UserController {
                         name: apk.name,
                         link: apk.apkLink,
                         version: apk.version,
+                        progress: apk.progress,
                     }
                 })
             };

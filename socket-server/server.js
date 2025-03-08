@@ -59,10 +59,10 @@ const startDroidbot = async (apkId, userId) => {
 
     await new RunningModel({ apkId, userId }).save();
 
-    if (fs.existsSync("/home/mahdiya/TestCube/droidbot/credential.txt")) fs.unlinkSync("/home/mahdiya/TestCube/droidbot/credential.txt");
-    fs.copyFileSync(apk.txtLink, "/home/mahdiya/TestCube/droidbot/credential.txt");
+    if (fs.existsSync("/home/saimon/TestCube/droidbot/credential.txt")) fs.unlinkSync("/home/saimon/TestCube/droidbot/credential.txt");
+    fs.copyFileSync(apk.txtLink, "/home/saimon/TestCube/droidbot/credential.txt");
 
-    droidbotProcess = spawn("bash", ["-c", `cd && droidbot -a ${apk.apkLink} -o output_dir`]);
+    droidbotProcess = spawn("bash", ["-c", `cd && droidbot -a ${apk.apkLink} -o output_dir -is_emulator`]);
 
     droidbotProcess.stdout.on("data", (data) => {
         console.log(`stdout: ${data}`);
@@ -86,7 +86,7 @@ const stopDroidbot = (apkLink, email) => {
         currentlyRunning = false;
         const folderPath = path.dirname(apkLink);
         const fileName = path.basename(apkLink);
-        const sourceDir = "/home/mahdiya/output_dir";
+        const sourceDir = "/home/saimon/output_dir";
         fs.moveSync(sourceDir, path.join(folderPath, "output"), { overwrite: true });
         sendReportNotification(email, fileName.substring(1));
         processQueue();
@@ -114,8 +114,17 @@ io.on('connection', (socket) => {
             const user = await UserModel.findOne({ _id: running.userId });
             stopDroidbot(apk.apkLink, user.email);
             apk.isFinished = true;
+            apk.progress = 100;
             await apk.save();
             await RunningModel.deleteOne({ userId: running.userId, apkId: running.apkId });
+        }else{
+            const runnings = await RunningModel.find().sort({ createdAt: -1 }).limit(1);
+            const running = await runnings[0] || null;
+            if (!running) return;
+            const apk = await ApkModel.findOne({ userId: running.userId, _id: running.apkId });
+            if (!apk) return;
+            apk.progress = Math.floor((data.data / 4) * 100);
+            await apk.save();
         }
     })
 

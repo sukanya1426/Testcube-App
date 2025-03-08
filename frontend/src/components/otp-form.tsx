@@ -40,7 +40,7 @@ const OTPVerification = () => {
     console.log(location.state.email, otp.join(""));
 
     try {
-      const response = await fetch("http://localhost:3000/user/change-password", {
+      const response = await fetch("http://localhost:3000/user/verify-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: location?.state?.email, otp: otp.join("") }),
@@ -50,11 +50,16 @@ const OTPVerification = () => {
       if (!response.ok) throw new Error(data.message || "Verification failed");
 
       console.log("User verified successfully:", data);
+      toast.success("Email verified successfully!");
       navigate("/login");
     } catch (err: unknown) {
       if (err instanceof Error) {
+        toast.error("Verification failed", {
+          description: err.message,
+        });
         setError(err.message);
       } else {
+        toast.error("An unknown error occurred.");
         setError("An unknown error occurred.");
       }
     } finally {

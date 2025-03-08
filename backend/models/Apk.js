@@ -8,6 +8,7 @@ const ApkSchema = new mongoose.Schema({
     txtLink: {type: String, required: true},
     packageName: {type: String, required: false},
     isFinished: {type: Boolean, required: true, default: false},
+    progress: {type: Number, required: true, default: 0},
     createdAt: {type: Date, required: true, default: Date.now},
 });
 

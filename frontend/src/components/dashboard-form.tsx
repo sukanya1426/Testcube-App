@@ -6,12 +6,13 @@ import ReportForm, { TestCase } from "./report-form";
 import numberToWords from "number-to-words";
 import { parseEmail } from "@/lib/utils";
 import { Progress } from "./ui/progress";
-import { useNavigate } from "react-router-dom";
+
+
 interface FileData {
   totalApks: number;
   pending: number;
   completed: number;
-  apks: [{ id: string; name: string; link: string; version: number }];
+  apks: [{ id: string; name: string; link: string; version: number, progress: number }];
 }
 
 export function Dashboard() {
@@ -88,7 +89,7 @@ export function Dashboard() {
       "_blank"
     );
   };
-  
+
 
 
 
@@ -143,10 +144,17 @@ export function Dashboard() {
                     <td className="p-2 border">
                       <div className="flex justify-center flex-col gap-2 items-center">
                         <div className="flex gap-4 items-center">
-                          <p>{apk.name.substring(1)}</p>
-                          <Progress value={60} aria-label="Progress" className="w-[200px] h-3"/>
+                          <p>{apk.name.substring(1)} - {apk.name.charAt(0)}</p>
+                          {apk.progress === 100 ? (
+                            <span className="text-green-500">Completed</span>) : (
+                            <div className="flex gap-4 items-center">
+                              <Progress value={apk.progress} aria-label="Progress" className="w-[200px] h-3" />
+                              <p>{apk.progress}%</p>
+                            </div>
+                          )}
                         </div>
-                        <div className="flex gap-4">
+                        {apk.progress === 100 ? (
+                          <div className="flex gap-4">
                           <Button onClick={() => handleSeeReport(apk.id)}>
                             See Report
                           </Button>
@@ -157,6 +165,7 @@ export function Dashboard() {
                             See Log
                           </Button>
                         </div>
+                        ): null}
                       </div>
                     </td>
                   </tr>
