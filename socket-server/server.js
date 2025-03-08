@@ -5,7 +5,7 @@ import cors from 'cors';
 import { spawn } from 'node:child_process';
 import connectDb from "../backend/config/DbConfig.js"
 import ApkModel from "../backend/models/Apk.js"
-import RunningModel from '../backend/models/Running.js';
+import CurrentSessionModel from "../backend/models/CurrentSession.js"
 import TestCaseModel from '../backend/models/TestCase.js';
 import InputModel from '../backend/models/Input.js';
 import fs from 'fs-extra';
@@ -57,7 +57,7 @@ const startDroidbot = async (apkId, userId) => {
         return;
     }
 
-    await new RunningModel({ apkId, userId }).save();
+    await new CurrentSessionModel({ apkId, userId }).save();
 
     if (fs.existsSync("/home/saimon/TestCube/droidbot/credential.txt")) fs.unlinkSync("/home/saimon/TestCube/droidbot/credential.txt");
     fs.copyFileSync(apk.txtLink, "/home/saimon/TestCube/droidbot/credential.txt");
@@ -104,9 +104,9 @@ io.on('connection', (socket) => {
 
     socket.on("restart", async (data) => {
         console.log("Restarting droidbot...", data.data);
-        if (data.data > 3) {
+        if (data.data > 9) {
             currentlyRunning = false;
-            const runnings = await RunningModel.find().sort({ createdAt: -1 }).limit(1);
+            const runnings = await CurrentSessionModel.find().sort({ createdAt: -1 }).limit(1);
             const running = await runnings[0] || null;
             if (!running) return;
             await InputModel.deleteMany({ userId: running.userId, apkId: running.apkId });
@@ -116,14 +116,14 @@ io.on('connection', (socket) => {
             apk.isFinished = true;
             apk.progress = 100;
             await apk.save();
-            await RunningModel.deleteOne({ userId: running.userId, apkId: running.apkId });
+            await CurrentSessionModel.deleteOne({ userId: running.userId, apkId: running.apkId });
         }else{
-            const runnings = await RunningModel.find().sort({ createdAt: -1 }).limit(1);
+            const runnings = await CurrentSessionModel.find().sort({ createdAt: -1 }).limit(1);
             const running = await runnings[0] || null;
             if (!running) return;
             const apk = await ApkModel.findOne({ userId: running.userId, _id: running.apkId });
             if (!apk) return;
-            apk.progress = Math.floor((data.data / 4) * 100);
+            apk.progress = Math.floor((data.data / 10) * 100);
             await apk.save();
         }
     })
@@ -131,7 +131,7 @@ io.on('connection', (socket) => {
     socket.on("input", async (data) => {
         console.log(data.data);
         try {
-            const runnings = await RunningModel.find().sort({ createdAt: -1 }).limit(1);
+            const runnings = await CurrentSessionModel.find().sort({ createdAt: -1 }).limit(1);
             const running = await runnings[0] || null;
             if (!running) return;
             const input = await InputModel.find({ userId: running.userId, apkId: running.apkId, field: data.data.field, text: data.data.text });
@@ -146,7 +146,7 @@ io.on('connection', (socket) => {
 
     socket.on('test_case', async (data) => {
         console.log(data.data);
-        const runnings = await RunningModel.find().sort({ createdAt: -1 }).limit(1);
+        const runnings = await CurrentSessionModel.find().sort({ createdAt: -1 }).limit(1);
         const running = await runnings[0] || null;
         if (!running) return;
         const inputs = await InputModel.find({ userId: running.userId, apkId: running.apkId });
@@ -160,7 +160,7 @@ io.on('connection', (socket) => {
 
     socket.on('package', async (data) => {
         console.log(data.data);
-        const runnings = await RunningModel.find().sort({ createdAt: -1 }).limit(1);
+        const runnings = await CurrentSessionModel.find().sort({ createdAt: -1 }).limit(1);
         const running = await runnings[0] || null;
         if (!running) return;
         const apk = await ApkModel.findOne({ userId: running.userId, _id: running.apkId });

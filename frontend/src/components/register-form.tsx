@@ -37,12 +37,19 @@ export function RegisterForm({
       if (!response.ok) throw new Error(data.message || "Registration failed");
 
       console.log("User Created successfully:", data);
+      toast.success("User created successfully. Please verify your email.");
       navigate("/verify-email", { state: { email: email } });
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
+        toast.error("Registration failed", {
+          description: err.message,
+        });
       } else {
         setError("An unknown error occurred.");
+        toast.error("Registration failed", {
+          description: "An unknown error occurred.",
+        });
       }
     }
   };
