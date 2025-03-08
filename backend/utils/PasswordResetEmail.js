@@ -1,18 +1,13 @@
 import dotenv from "dotenv";
 dotenv.config();
-import VerificationEmailModel from "../models/VerificationEmail.js";
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
 
 
-const sendEmailVerificationOTP = async (user) => {
+const sendPasswordResetOtp = async (email) => {
     const otp = Math.floor(100000 + Math.random() * 900000);
-    await new VerificationEmailModel({
-        userId: user._id,
-        otp
-    }).save();
 
-    const otpVerificationLink = `${process.env.FRONTEND_HOST}/verify-email`;
+    const otpVerificationLink = `${process.env.FRONTEND_HOST}/forgot-password/otp`;
 
     const mailerSend = new MailerSend({
         apiKey: process.env.MAIL_API_KEY,
@@ -21,7 +16,7 @@ const sendEmailVerificationOTP = async (user) => {
     const sentFrom = new Sender(process.env.MAIL_SENDER || "");
 
     const recipients = [
-        new Recipient(user.email)
+        new Recipient(email)
     ];
 
     const emailParams = new EmailParams()
@@ -48,4 +43,4 @@ const sendEmailVerificationOTP = async (user) => {
     return otp;
 };
 
-export default sendEmailVerificationOTP;
+export default sendPasswordResetOtp;

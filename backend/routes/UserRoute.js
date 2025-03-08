@@ -12,6 +12,9 @@ router.post('/login', UserController.login);
 router.post("/upload", UserController.uploadFiles);
 router.post("/refresh", UserController.getNewAccessToken);
 router.post("/logout", UserController.logout);
+router.post("/reset-password", UserController.sendResetPasswordEmail);
+router.post("/verify-password-reset-otp", UserController.verifyPasswordResetOtp);
+router.post("/change-password", UserController.changePassword);
 
 
 

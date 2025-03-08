@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-const OTPVerification = () => {
+const PasswordResetOtp = () => {
   const [otp, setOtp] = useState(Array(6).fill("")); // OTP State
   const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
@@ -40,7 +40,7 @@ const OTPVerification = () => {
     console.log(location.state.email, otp.join(""));
 
     try {
-      const response = await fetch("http://localhost:3000/user/change-password", {
+      const response = await fetch("http://localhost:3000/user/verify-password-reset-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: location?.state?.email, otp: otp.join("") }),
@@ -50,7 +50,7 @@ const OTPVerification = () => {
       if (!response.ok) throw new Error(data.message || "Verification failed");
 
       console.log("User verified successfully:", data);
-      navigate("/login");
+      navigate("/change-password", { state: { email: location?.state?.email } });
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -122,4 +122,4 @@ const OTPVerification = () => {
   );
 };
 
-export default OTPVerification;
+export default PasswordResetOtp;

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export function ResetPasswordForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
@@ -12,7 +12,7 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentPropsW
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { id, token } = useParams();
+  const location = useLocation();
 
   const handleResetPassword = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -30,10 +30,10 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentPropsW
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}/api/reset-password/${id}/${token}`, {
+      const response = await fetch(`http://localhost:3000/user/change-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password, password_confirmation: passwordConfirmation }),
+        body: JSON.stringify({ password, confirmPassword: passwordConfirmation, email: location?.state?.email }),
       });
 
       const data = await response.json();
@@ -90,7 +90,7 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentPropsW
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition-all duration-300"
               disabled={loading}
             >
-             <a href="/login" className="text-white">Reset Password</a>
+             Change Password
             </Button>
           </form>
         </CardContent>

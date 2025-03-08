@@ -14,10 +14,14 @@ import verifyRefreshToken from '../utils/VerifyRefreshToken.js';
 import TestCaseModel from '../models/TestCase.js'
 import RefreshTokenModel from '../models/RefreshToken.js';
 import numberToWords from 'number-to-words';
+import sendPasswordResetOtp from '../utils/PasswordResetEmail.js'
 
 
 
 class UserController {
+    static verificationMap = new Map();
+
+
     static register = async (req, res) => {
         try {
             const { email, password, confirmPassword } = req.body;
@@ -411,6 +415,78 @@ class UserController {
                 message: "Internal server error. Please try again."
             })
         }
+    }
+
+
+    static sendResetPasswordEmail = async (req, res) => {
+        try {
+            const { email } = req.body;
+            if (!email) {
+                return res.status(400).json({ message: "Email field is required" });
+            }
+            const user = await UserModel.findOne({ email });
+            if (!user) {
+                return res.status(404).json({ message: "Email doesn't exist" });
+            }
+
+            const otp = await sendPasswordResetOtp(email)
+
+            this.verificationMap.set(email, { otp:  otp.toString() });
+            
+            res.status(200).json({ message: "Password reset email sent. Please check your email." });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Unable to send password reset email. Please try again later." });
+        }
+    }
+
+    static verifyPasswordResetOtp = async (req, res) => {
+        const { email, otp } = req.body;
+        console.log(req.body);
+        console.log(this.verificationMap.get(email));
+        if (!email) {
+            return res.status(400).json({ message: "Email field is required" });
+        }
+        if (!otp) {
+            return res.status(400).json({ message: "OTP field is required" });
+        }
+        if (!this.verificationMap.has(email)) {
+            return res.status(400).json({ message: "Invalid email" });
+        }
+        const { otp: storedOtp } = this.verificationMap.get(email);
+        if (otp !== storedOtp) {
+            return res.status(400).json({ message: "Invalid OTP" });
+        }
+        this.verificationMap.delete(email);
+        res.status(200).json({ message: "OTP verified successfully" });
+    }
+
+    static changePassword = async (req, res) => {
+        const { email, password, confirmPassword } = req.body;
+        console.log(req.body);
+        if (!email) {
+            return res.status(400).json({ message: "Email field is required" });
+        }
+        if (!password) {
+            return res.status(400).json({ message: "Password field is required" });
+        }
+        if (!confirmPassword) {
+            return res.status(400).json({ message: "Confirm password field is required" });
+        }
+        if (password !== confirmPassword) {
+            return res.status(400).json({ message: "Passwords do not match" });
+        }
+        const user = await UserModel.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "Email doesn't exist" });
+        }
+        const salt = await bcrypt.genSalt(Number(process.env.SALT));
+        const hashedPassword = await bcrypt.hash(password, salt);
+        user.password = hashedPassword;
+        await user.save();
+        console.log(user)
+        console.log(password)
+        res.status(200).json({ message: "Password changed successfully" });
     }
 }
 
