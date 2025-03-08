@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/auth-context";
+import { Button } from "./ui/button";
 
 export function Header() {
   const { user, logout } = useAuth();
@@ -33,23 +34,13 @@ export function Header() {
           </Link>
         </nav>
 
-        <div className="relative group">
+        <div className="flex items-center justify-center gap-6">
           <button className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600">
             <span className="text-white font-bold">{user?.email.charAt(0).toUpperCase()}</span>
           </button>
 
-          <div className="absolute right-0 mt-2 w-48 bg-white text-gray-900 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
-            <Link to="/profile" className="block px-4 py-2 hover:bg-gray-200">
-              Profile
-            </Link>
-            <button
-              onClick={() => {
-                logout();
-              }}
-              className="block w-full text-left px-4 py-2 hover:bg-gray-200"
-            >
-              Logout
-            </button>
+          <div>
+            <Button className="bg-red-500" onClick={logout}>Logout</Button>
           </div>
         </div>
       </div>

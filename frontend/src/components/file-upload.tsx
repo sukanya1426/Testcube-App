@@ -6,7 +6,6 @@ import { toast } from "sonner";
 export function FileUplaoad() {
   const [apkFile, setApkFile] = useState<File | null>(null);
   const [txtFile, setTxtFile] = useState<File | null>(null);
-  const [uploadStatus, setUploadStatus] = useState<{ message: string; success: boolean } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const { user } = useAuth();
 
@@ -34,7 +33,6 @@ export function FileUplaoad() {
     }
 
     setIsUploading(true);
-    setUploadStatus(null);
 
     try {
       const formData = new FormData();
@@ -49,12 +47,10 @@ export function FileUplaoad() {
       });
       if (response.status !== 200) throw new Error(await response.data.message || "File upload failed.");
 
-      setUploadStatus({ message: response.data.message, success: true });
       setApkFile(null);
       setTxtFile(null);
       toast.success(response.data.message);
     } catch (error) {
-      setUploadStatus({ message: error instanceof Error ? error.message : "Upload failed.", success: false });
       toast.error(error instanceof Error ? error.message : "Upload failed.");
     } finally {
       setIsUploading(false);
@@ -87,13 +83,6 @@ export function FileUplaoad() {
         >
           {isUploading ? "Uploading..." : "Submit"}
         </button>
-
-        {/* Upload Status */}
-        {uploadStatus && (
-          <div className={`mt-4 p-4 rounded-md ${uploadStatus.success ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
-            {uploadStatus.message}
-          </div>
-        )}
       </main>
     </div>
   );

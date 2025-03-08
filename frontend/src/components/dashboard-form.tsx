@@ -5,12 +5,12 @@ import { toast } from "sonner";
 import ReportForm, { TestCase } from "./report-form";
 import numberToWords from "number-to-words";
 import { parseEmail } from "@/lib/utils";
-
+import { Progress } from "./ui/progress";
 interface FileData {
   totalApks: number;
   pending: number;
   completed: number;
-  apks: [{ id: string; name: string, link: string, version: number }];
+  apks: [{ id: string; name: string; link: string; version: number }];
 }
 
 export function Dashboard() {
@@ -18,7 +18,6 @@ export function Dashboard() {
   const [fileData, setFileData] = useState<FileData | null>(null);
   const { user } = useAuth();
   const [showReport, setShowReport] = useState(false);
-  //const [showGraph, setShowGraph] = useState(false);
   const [testCases, setTestCases] = useState<TestCase[]>([]);
 
   useEffect(() => {
@@ -73,26 +72,44 @@ export function Dashboard() {
   };
 
   const handleSeeGraph = (version: number) => {
-    window.open(`http://localhost:3000/graph/${parseEmail(user?.email || "")}/apk/${numberToWords.toWords(version)}/output/index.html`, "_blank");
+    window.open(
+      `http://localhost:3000/graph/${parseEmail(
+        user?.email || ""
+      )}/apk/${numberToWords.toWords(version)}/output/index.html`,
+      "_blank"
+    );
   };
   const handleSeeLog = (version: number) => {
-    window.open(`http://localhost:3000/log/${parseEmail(user?.email || "")}/apk/${numberToWords.toWords(version)}/output/logcat.txt`, "_blank");
+    window.open(
+      `http://localhost:3000/log/${parseEmail(
+        user?.email || ""
+      )}/apk/${numberToWords.toWords(version)}/output/logcat.txt`,
+      "_blank"
+    );
   };
-  
+
   return (
     <div className="h-full w-screen p-5 bg-white rounded-lg shadow-md">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="p-5 bg-white shadow-lg rounded-lg text-center">
           <h2 className="text-lg font-semibold text-gray-700">Total Files</h2>
-          <p className="text-2xl font-bold text-blue-600">{fileData?.totalApks || 0}</p>
+          <p className="text-2xl font-bold text-blue-600">
+            {fileData?.totalApks || 0}
+          </p>
         </div>
         <div className="p-5 bg-white shadow-lg rounded-lg text-center">
           <h2 className="text-lg font-semibold text-gray-700">Pending Tests</h2>
-          <p className="text-2xl font-bold text-yellow-500">{fileData?.pending || 0}</p>
+          <p className="text-2xl font-bold text-yellow-500">
+            {fileData?.pending || 0}
+          </p>
         </div>
         <div className="p-5 bg-white shadow-lg rounded-lg text-center">
-          <h2 className="text-lg font-semibold text-gray-700">Completed Tests</h2>
-          <p className="text-2xl font-bold text-green-500">{fileData?.completed || 0}</p>
+          <h2 className="text-lg font-semibold text-gray-700">
+            Completed Tests
+          </h2>
+          <p className="text-2xl font-bold text-green-500">
+            {fileData?.completed || 0}
+          </p>
         </div>
       </div>
 
@@ -103,7 +120,12 @@ export function Dashboard() {
       ) : (
         <div className="overflow-x-auto">
           {showReport ? (
-            <ReportForm testCases={testCases} onClose={() => { setShowReport(false); }} />
+            <ReportForm
+              testCases={testCases}
+              onClose={() => {
+                setShowReport(false);
+              }}
+            />
           ) : (
             <table className="w-full border border-gray-200">
               <thead>
@@ -115,11 +137,22 @@ export function Dashboard() {
                 {fileData.apks.map((apk, index) => (
                   <tr key={index} className="text-center border">
                     <td className="p-2 border">
-                      <div className="flex justify-center gap-10 items-center">
-                        <p>{apk.name.substring(1)}</p>
-                        <Button onClick={() => handleSeeReport(apk.id)}>See Report</Button>
-                        <Button onClick={() => handleSeeGraph(apk.version)}>See Graph</Button>
-                        <Button onClick={() => handleSeeLog(apk.version)}>See Log</Button>
+                      <div className="flex justify-center flex-col gap-2 items-center">
+                        <div className="flex gap-4 items-center">
+                          <p>{apk.name.substring(1)}</p>
+                          <Progress value={60} aria-label="Progress" className="w-[200px] h-3"/>
+                        </div>
+                        <div className="flex gap-4">
+                          <Button onClick={() => handleSeeReport(apk.id)}>
+                            See Report
+                          </Button>
+                          <Button onClick={() => handleSeeGraph(apk.version)}>
+                            See Graph
+                          </Button>
+                          <Button onClick={() => handleSeeLog(apk.version)}>
+                            See Log
+                          </Button>
+                        </div>
                       </div>
                     </td>
                   </tr>
