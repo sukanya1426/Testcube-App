@@ -317,8 +317,8 @@ class UserController {
                 return res.status(404).json({ message: "User not found." });
             }
 
-            const apkLink = `/home/saimon/Documents/Testcube-App/backend/uploads/${this.parseEmail(email)}/apk/${numberToWords.toWords(version)}/${apkName}`;
-            const txtLink = `/home/saimon/Documents/Testcube-App/backend/uploads/${this.parseEmail(email)}/txt/${numberToWords.toWords(version)}/${txtName}`;
+            const apkLink = `/home/mahdiya/testcube-app/backend/uploads/${this.parseEmail(email)}/apk/${numberToWords.toWords(version)}/${apkName}`;
+            const txtLink = `/home/mahdiya/testcube-app/backend/uploads/${this.parseEmail(email)}/txt/${numberToWords.toWords(version)}/${txtName}`;
 
             const apk = await new ApkModel({
                 name: apkName,

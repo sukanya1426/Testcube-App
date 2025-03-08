@@ -10,6 +10,8 @@ import TestCaseModel from '../backend/models/TestCase.js';
 import InputModel from '../backend/models/Input.js';
 import fs from 'fs-extra';
 import path from 'path';
+import UserModel from '../backend/models/User.js';
+import sendReportNotification from '../backend/utils/EmailNotification.js';
 
 
 const app = express();
@@ -57,10 +59,10 @@ const startDroidbot = async (apkId, userId) => {
 
     await new RunningModel({ apkId, userId }).save();
 
-    if (fs.existsSync("/home/saimon/TestCube/droidbot/credential.txt")) fs.unlinkSync("/home/saimon/TestCube/droidbot/credential.txt");
-    fs.copyFileSync(apk.txtLink, "/home/saimon/TestCube/droidbot/credential.txt");
+    if (fs.existsSync("/home/mahdiya/TestCube/droidbot/credential.txt")) fs.unlinkSync("/home/mahdiya/TestCube/droidbot/credential.txt");
+    fs.copyFileSync(apk.txtLink, "/home/mahdiya/TestCube/droidbot/credential.txt");
 
-    droidbotProcess = spawn("bash", ["-c", `cd && droidbot -a ${apk.apkLink} -o output_dir -is_emulator`]);
+    droidbotProcess = spawn("bash", ["-c", `cd && droidbot -a ${apk.apkLink} -o output_dir`]);
 
     droidbotProcess.stdout.on("data", (data) => {
         console.log(`stdout: ${data}`);
@@ -76,15 +78,17 @@ const startDroidbot = async (apkId, userId) => {
     });
 };
 
-const stopDroidbot = (apkLink) => {
+const stopDroidbot = (apkLink, email) => {
     if (droidbotProcess) {
         console.log("Stopping droidbot...");
         droidbotProcess.kill("SIGTERM");
         droidbotProcess = null;
         currentlyRunning = false;
         const folderPath = path.dirname(apkLink);
-        const sourceDir = "/home/saimon/output_dir";
+        const fileName = path.basename(apkLink);
+        const sourceDir = "/home/mahdiya/output_dir";
         fs.moveSync(sourceDir, path.join(folderPath, "output"), { overwrite: true });
+        sendReportNotification(email, fileName.substring(1));
         processQueue();
     } else {
         console.log("No droidbot process running.");
@@ -100,14 +104,15 @@ io.on('connection', (socket) => {
 
     socket.on("restart", async (data) => {
         console.log("Restarting droidbot...", data.data);
-        if (data.data > 0) {
+        if (data.data > 3) {
             currentlyRunning = false;
             const runnings = await RunningModel.find().sort({ createdAt: -1 }).limit(1);
             const running = await runnings[0] || null;
             if (!running) return;
             await InputModel.deleteMany({ userId: running.userId, apkId: running.apkId });
             const apk = await ApkModel.findOne({ userId: running.userId, _id: running.apkId });
-            stopDroidbot(apk.apkLink);
+            const user = await UserModel.findOne({ _id: running.userId });
+            stopDroidbot(apk.apkLink, user.email);
             apk.isFinished = true;
             await apk.save();
             await RunningModel.deleteOne({ userId: running.userId, apkId: running.apkId });
@@ -165,7 +170,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         // console.log('User disconnected');
     });
-});
+});``
 
 server.listen(4000, () => {
     console.log('Socket.io server is running on port 4000');

@@ -43,7 +43,7 @@ const ReportForm = ({ testCases, onClose }: ReportFormProps) => {
       {testCases.map((testCase, index) => (
         <Card key={index} className="shadow-lg rounded-xl mb-4">
           <CardHeader>
-            <h3 className="text-xl font-bold">Test Case</h3>
+            <h3 className="text-xl font-bold">Test Case {index+1}</h3>
           </CardHeader>
           <CardContent>
             <div className="mb-4">
