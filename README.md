@@ -25,9 +25,10 @@
 - Node.js & npm
 - Python 3.10+
 - MongoDB
-- Android sdk
-- java
-- Gemini Api Key
+- Java (JDK 11+ recommended)  
+- Android SDK + ADB  
+- [DroidBot](https://github.com/honeynet/droidbot)  
+- Gemini API Key (for AI input assignment) 
 
 ### 📦 Installation
 
@@ -57,3 +58,38 @@ cd testcube
     + If your apps do not support getting views through Accessibility (e.g., most games based on Cocos2d, Unity3d), you may find `-cv` option helpful.
     + You can use `-humanoid` option to let DroidBot communicate with [Humanoid](https://github.com/yzygitzh/Humanoid) in order to generate human-like test inputs.
     + You may find other useful features in `droidbot -h`.
+  
+
+3. Run Backend:
+
+   Create a .env file in the backend directory with necessary environment variables like:
+   ```
+   MONGO_URI=mongodb://localhost:27017/testcube
+   GEMINI_API_KEY=your-api-key-here
+   ```
+ Then, install dependencies and start the backend server:
+
+  ```
+  npm install
+  npm run start
+  ```
+
+4. To Setup Server Socket:
+
+  ```
+  cd ../socket-server
+  cp .env.example .env  # or manually create the .env file
+  npm install
+  npm run start
+ ```
+
+5. To setup Frontend
+```
+cd ../frontend
+cp .env.example .env  # include API endpoints and keys
+npm install
+npm run dev
+```
+
+
+   
