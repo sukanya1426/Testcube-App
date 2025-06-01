@@ -62,11 +62,11 @@ cd testcube
 
 3. Run Backend:
 
-   Create a .env file in the backend directory with necessary environment variables like:
-   ```
-   MONGO_URI=mongodb://localhost:27017/testcube
-   GEMINI_API_KEY=your-api-key-here
-   ```
+Create a .env file in the backend directory with necessary environment variables like:
+ ```
+ MONGO_URI=mongodb://localhost:27017/testcube
+ GEMINI_API_KEY=your-api-key-here
+ ```
  Then, install dependencies and start the backend server:
 
   ```
